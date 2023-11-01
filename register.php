@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
     <title>Registrace</title>
 </head>
 <body>
@@ -45,7 +46,7 @@
     <form action="/register.php" method="post" id="register_form">
         <div>
             <label for="username">Uživatelské jméno: </label>
-            <input type="text" name="username" id="register_username" value="<?php echo isset($_POST["username"])?htmlspecialchars($_POST["username"]):"";?>">
+            <input type="text" name="username" id="register_username" autofocus value="<?php echo isset($_POST["username"])?htmlspecialchars($_POST["username"]):"";?>">
             <p id="register_username_error"><?php echo isset($error["username"])?$error["username"]:"";?></p>
         </div>
         <div>

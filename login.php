@@ -30,7 +30,7 @@
     <form action="/login.php" method="post" id="login_form">
         <div>
             <label for="username">Uživatelské jméno: </label>
-            <input type="text" name="username" id="login_username" value="<?php echo isset($_POST["username"])?htmlspecialchars($_POST["username"]):"";?>">
+            <input type="text" name="username" id="login_username" autofocus value="<?php echo isset($_POST["username"])?htmlspecialchars($_POST["username"]):"";?>">
             <p id="login_username_error"></p>
         </div>
         <div>
