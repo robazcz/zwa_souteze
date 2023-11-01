@@ -1,0 +1,45 @@
+.navbar{
+    display: block;
+    background-color: #a6a6a6;
+}
+
+.navbar ul{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.navbar li{
+    display: inline;
+    float: left;
+    padding: .5em;
+}
+
+.navbar .login{
+    float: right
+}
+
+body{
+    font-family: 'Helvetica', 'Arial', sans-serif;
+}
+
+main{
+    display: block;
+}
+
+article{
+    border: 2px solid;
+    border-radius: 1em;
+    margin: .5em;
+    padding: 1em;
+}
+
+h3{
+    margin: 0;
+}
+
+.date_event{
+    color: #313131;
+    font-size: .75em;
+}
