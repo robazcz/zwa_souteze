@@ -38,9 +38,8 @@ function unfocus_input(){
 }
 
 function submit_form(event){
-    document.dispatchEvent(new Event("focusout"));
     for(let key in error_elements){
-        console.log(document.getElementById(error_elements[key]).textContent);
+        document.getElementById(key).dispatchEvent(new Event("focusout"));
         if(document.getElementById(error_elements[key]).textContent != ""){
             event.preventDefault();
             }
