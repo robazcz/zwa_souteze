@@ -45,6 +45,7 @@
             </div>
             <input type="submit" value="Přihlásit">
         </form>
+        <p><a href="/register.php">registrace</a></p>
         <?php //echo "<p>".$_SESSION["username"]."</p>"; ?>
     </main>
     <script src="script.js"></script>

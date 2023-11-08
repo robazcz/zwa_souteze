@@ -34,6 +34,14 @@ function unfocus_input(){
                 document.getElementById("register_password_2_error").innerHTML = "Hesla se neshodují";
             }
         }
+        else if(this.id == "register_username"){
+            fetch("/check.php", {method: "POST", headers:{"Content-Type": "application/x-www-form-urlencoded"}, body: `username=${this.value}`}).then(res => res.json()).then(data => {
+                console.log(data)
+                if(data.exist == "true"){
+                    document.getElementById(error_elements[this.id]).innerHTML = "Jméno již existuje";
+                }
+            })
+        }
     }
 }
 
