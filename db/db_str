@@ -1,0 +1,45 @@
+competition
+ - id
+ - id_user -> user
+ - date_created
+ - title
+ - description
+ - proposition
+ - date_event
+ - town
+ - id_results -> results
+
+user
+ - id
+ - username
+ - id_role ?
+ - date_created
+ - password
+
+results
+ - id
+ - date_created
+ - id_user -> user
+
+result
+ - id
+ - id_team -> team
+ - id_results -> results
+ - time_run
+ - time_run_2
+ - valid_run
+
+team
+ - id
+ - name
+ - id_category -> category
+
+category
+ - id
+ - name
+
+photo
+ - id
+ - id_user -> user
+ - date_created
+ - id_competition -> competition
