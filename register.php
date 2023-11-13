@@ -39,7 +39,8 @@
 
             if(!(isset($error["username"]) | isset($error["password"]) | isset($error["password_2"]))){
                 $pswd = password_hash($_POST["password"], PASSWORD_BCRYPT);
-                $db->exec("INSERT INTO user (username, password) VALUES ('$_POST[username]', '$pswd')");
+                $usr = strtolower($_POST["username"]);
+                $db->exec("INSERT INTO user (username, password) VALUES ('$usr', '$pswd')");
                 header("Location: /login.php");
             }
             //echo password_verify($_POST["password"], $pswd);

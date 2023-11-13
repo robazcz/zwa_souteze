@@ -24,23 +24,44 @@
             <div>
                 <p>Výsledky</p>
                 <?php
-                    $categories = $db->query("SELECT * FROM category")->fetchAll();
-                    //$results = $db->query("SELECT * FROM result WHERE id_results = $comp[id_results]"); // všechny výsledky pro soutěž
-                    foreach ($categories as $category) {
-                        $results = $db->query("SELECT * FROM result r, team t where r.id_team = t.id and t.id_category = $category[id] ORDER BY time_run ASC");
-                        $results = $results->fetchAll();
-                        if($results){
-                            echo "<p>$category[name]</p>";
-                            echo "<ol>";
-                            foreach( $results as $result ) {
-                                echo "<li>$result[name] : $result[time_run]</li>";
+                    if(!is_null($comp["id_results"])){
+                        $categories = $db->query("SELECT * FROM category")->fetchAll();
+                        //$results = $db->query("SELECT * FROM result WHERE id_results = $comp[id_results]"); // všechny výsledky pro soutěž
+                        $vysledky = [];
+                        foreach ($categories as $category) {
+                            $results = $db->query("SELECT * FROM result r, team t where r.id_team = t.id and t.id_category = $category[id] and r.id_results = $comp[id_results] ORDER BY time_run ASC");
+                            $results = $results->fetchAll();
+                            $vysledky[$category["id"]] = $results;
+                        }
+
+                        foreach($vysledky as $key => $vysledek){
+                            if($vysledek){
+                                $rowcount = 1;
+                                echo "<table>";
+                                echo "<tr><th colspan=3>".$categories[$key-1]["name"]."</th></tr>";
+                                foreach( $vysledek as $result ) {
+                                    echo "<tr><td>$rowcount</td><td>$result[name]</td><td>".number_format($result["time_run"],2,",")."</td></tr>";
+                                    $rowcount++;
+                                }
+                                echo "</table>";
                             }
-                            echo "</ol>";
                         }
                     }
-
+                    else{
+                        echo "<a>přidat výsledky</a>";
+                    }
                 ?>
             </div>
+            <?php
+            if(isset($_SESSION["username"])){
+                echo "<form method='POST' action='/upload.php'>";
+                echo "<label for='image_upload'>Nahrát obrázek: </label>";
+                echo "<input type='file' name='image' id='image_upload' multiple></form>";
+            }
+            else{
+                echo "<p>Pro nahrávání obrázků se přihlašte</p>";
+            }
+            ?>
         </article>
     </main>
 </body>

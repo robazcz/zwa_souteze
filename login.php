@@ -16,15 +16,21 @@
             }
             $db = new PDO("sqlite:database.db");
             if(isset($_POST["username"], $_POST["password"])){
-                $q = $db->query("SELECT id, password FROM user WHERE username = '$_POST[username]'");
+                $usr = strtolower($_POST["username"]);
+                $q = $db->query("SELECT id, password FROM user WHERE username = '$usr'");
                 $user = $q->fetch();
                 if(!$user){
                     $error["login"] = "Špatné přihlašovací údaje";                
                 }
                 else{
                     if (password_verify($_POST["password"], $user["password"])){
-                        $_SESSION["username"] = $_POST["username"];
-                        header("Location: /");
+                        $_SESSION["username"] = $usr;
+                        if(isset($_POST["next"])){
+                            header("Location: $_POST[next]");
+                        }
+                        else{
+                            header("Location: /");
+                        }
                     }
                     else{
                         $error["login"] = "Špatné přihlašovací údaje"; 
@@ -33,6 +39,7 @@
             }
             ?>
         <form action="/login.php" method="post" id="login_form">
+            <?php echo isset($_GET["next"])? "<input type='hidden' name='next' value='$_GET[next]'>": "" ?>
             <div>
                 <label for="username">Uživatelské jméno: </label>
                 <input type="text" name="username" id="login_username" autofocus value="<?php echo isset($_POST["username"])?htmlspecialchars($_POST["username"]):"";?>">
