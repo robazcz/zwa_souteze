@@ -25,7 +25,7 @@
                     $error["username"] = "Jméno již existuje";
                 }
                 if (preg_match("/^[a-zA-Z0-9-_.]+$/", $_POST["username"]) == 0){
-                    $errorr["username"] = "Jméno obsahuje zakázané znaky";
+                    $error["username"] = "Jméno obsahuje zakázané znaky";
                 }
             }
             if(empty($_POST["password"])){

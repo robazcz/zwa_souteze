@@ -26,12 +26,15 @@ else if(window.location.pathname == "/register.php"){
 function unfocus_input(){
     if(this.value == ""){
         document.getElementById(error_elements[this.id]).innerHTML = "Pole musí být vyplněno";
+        this.classList.add("error");
     }
     else{
         document.getElementById(error_elements[this.id]).innerHTML = "";
+        this.classList.remove("error");
         if(this.id == "register_password_2"){
             if(document.getElementById("register_password").value != this.value){
                 document.getElementById("register_password_2_error").innerHTML = "Hesla se neshodují";
+                this.classList.add("error");
             }
         }
         else if(this.id == "register_username"){
@@ -39,8 +42,9 @@ function unfocus_input(){
                 console.log(data)
                 if(data.exist == "true"){
                     document.getElementById(error_elements[this.id]).innerHTML = "Jméno již existuje";
+                    this.classList.add("error");
                 }
-            })
+            });
         }
     }
 }

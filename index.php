@@ -11,23 +11,35 @@
     <?php $db = new PDO("sqlite:database.db"); ?>
     <?php include_once("header.php"); ?>
     <main>
-    <?php
-        $q = $db->prepare("SELECT * FROM competition"); // WHERE date_created < date()
-        $q->execute();
+        <?php
 
-        foreach($q->fetchAll() as $i){
-            echo "<article>";
-            echo "<h3><a href='/competition.php?id=$i[id]'> $i[title] </a></h3>";
-            echo "<div class='date_event'>".date_format(date_create($i["date_event"]), "d.  m. Y")."</div>";
-            echo "<div> $i[description] </div>";
-            echo "</article>";
-            //print_r($i);
-            //echo("<p>".$i["title"]."</p>");
-            //echo strtotime($i["date_created"]);
+        $q = $db->query("SELECT * FROM competition WHERE date_created > date()");
+        $st = $q->fetchAll(PDO::FETCH_ASSOC);
+        if(!empty($st)) {
+            echo "<div class='separator-div'><p class='separator-text'>Nadcházející</p>";
+            echo "<hr></div>";
+            foreach($st() as $i){
+                echo "<article>";
+                echo "<h3><a href='/competition.php?id=$i[id]'> $i[title] </a></h3>";
+                echo "<div class='date_event'>".date_format(date_create($i["date_event"]), "d.  m. Y")."</div>";
+                echo "<div> $i[description] </div>";
+                echo "</article>";
+            }
         }
 
-        //echo $q;
-        
+        $q = $db->query("SELECT * FROM competition WHERE date_created < date()");
+        $st = $q->fetchAll(PDO::FETCH_ASSOC);
+        if(!empty($st)){
+            echo "<div class='separator-div'><p class='separator-text'>Proběhlé</p>";
+            echo "<hr></div>";
+            foreach($st as $i){
+                echo "<article>";
+                echo "<h3><a href='/competition.php?id=$i[id]'> $i[title] </a></h3>";
+                echo "<div class='date_event'>".date_format(date_create($i["date_event"]), "d.  m. Y")."</div>";
+                echo "<div> $i[description] </div>";
+                echo "</article>";
+            }
+        }
     ?>
     </main>
 </body>

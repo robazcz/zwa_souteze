@@ -53,3 +53,59 @@ a{
     text-decoration: none;
     color: black;
 }
+
+.separator-div{
+    margin: 0 2em 1em;
+}
+
+.separator-div p{
+    font-size: .75em;
+    margin-bottom: 0;
+}
+
+.separator-div hr{
+    margin: 0;
+}
+
+.login-box{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border: solid 2px black;
+    padding: 1em;
+    min-width: 20em;
+}
+
+.login-box input{
+    width: 100%;
+    padding: 5px;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.login-box a{
+    text-decoration: underline;
+    float: right;
+}
+
+.login-box p{
+    color: red;
+    margin: 0 0 .5em;
+    font-size: .9em;
+    height: .9em;
+}
+
+.login-box input.error{
+    border-color: red;
+}
+
+main.login{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 3em 0;
+}
+
+.block {
+    display: block;
+}
