@@ -73,7 +73,7 @@ a{
     justify-content: center;
     border: solid 2px black;
     padding: 1em;
-    min-width: 20em;
+    /* min-width: 20em; */
 }
 
 .login-box input{
@@ -106,6 +106,21 @@ main.login{
     padding: 3em 0;
 }
 
-.block {
-    display: block;
+.comp-name-line p, .comp-name-line h2{
+    display: inline-block;
+    margin: 1em 0 0 0
+}
+
+.comp-name-line h2{
+    margin: .4em 0 0;
+}
+
+.comp hr{
+    margin-top: 0;
+}
+
+.results{
+    display: flex;
+    gap: 1em;
+    flex-wrap: wrap;
 }

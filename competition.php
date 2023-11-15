@@ -14,10 +14,10 @@
 </head>
 <body>
     <?php include_once("header.php"); ?>
-    <main>
+    <main class="comp">
         <article>
-            <h2><?php echo $comp["title"] ?></h2>
-            <p>čas konání: <em><?php echo $comp["date_event"] ?></em></p>
+            <div class="comp-name-line"><h2><?php echo $comp["title"] ?></h2> <em><?php echo date_format(date_create($comp["date_event"]), 'j. n. Y') ?></em></div>
+            <hr>
             <p>místo konání: <em><?php echo $comp["town"] ?></em></p>
             <p>propozice: <em><?php echo $comp["proposition"] ?></em></p>
             <p><?php echo $comp["description"] ?></p>
@@ -33,7 +33,7 @@
                             $results = $results->fetchAll();
                             $vysledky[$category["id"]] = $results;
                         }
-
+                        echo "<div class='results'>";
                         foreach($vysledky as $key => $vysledek){
                             if($vysledek){
                                 $rowcount = 1;
@@ -46,6 +46,7 @@
                                 echo "</table>";
                             }
                         }
+                        echo "</div>";
                     }
                     else{
                         echo "<a>přidat výsledky</a>";

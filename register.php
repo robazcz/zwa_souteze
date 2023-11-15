@@ -9,7 +9,7 @@
 </head>
 <body>
     <?php include_once("header.php"); ?>  
-    <main>
+    <main class="login">
         <?php
         $db = new PDO("sqlite:database.db");
         if(isset($_POST["username"], $_POST["password"], $_POST["password_2"])){
@@ -47,7 +47,7 @@
             
         }
         ?>
-        <form action="/register.php" method="post" id="register_form">
+        <form action="/register.php" method="post" id="register_form" class="login-box">
             <div>
                 <label for="username">Uživatelské jméno: </label>
                 <input type="text" name="username" id="register_username" autofocus value="<?php echo isset($_POST["username"])?htmlspecialchars($_POST["username"]):"";?>">
