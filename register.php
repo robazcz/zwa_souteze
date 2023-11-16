@@ -4,14 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="content/static/style.css">
     <title>Registrace</title>
 </head>
 <body>
+    <?php $db = new PDO("sqlite:" . __DIR__ . "/database.db"); ?>
     <?php include_once("header.php"); ?>  
     <main class="login">
         <?php
-        $db = new PDO("sqlite:database.db");
         if(isset($_POST["username"], $_POST["password"], $_POST["password_2"])){
             if(empty($_POST["username"])){
                 $error["username"] = "Pole nemůže být prázdné";

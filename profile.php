@@ -21,7 +21,7 @@
             //odhlásit
             if(isset($_POST["logout"])){
                 unset($_SESSION["username"]);
-                header("Location: /login.php");
+                header("Location: login.php");
             }
         ?>
         <form action="/profile.php" method="post">

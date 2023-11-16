@@ -1,6 +1,6 @@
 <?php
     if(isset($_POST["username"])){
-        $db = new PDO("sqlite:database.db");
+        $db = new PDO("sqlite:" . __DIR__ . "/database.db");
         $q = $db->query("SELECT count(id) FROM user WHERE username = '$_POST[username]'");
         if($q->fetchColumn() > 0){
             $found = ["exist" => "true"];

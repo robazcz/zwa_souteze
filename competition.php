@@ -1,6 +1,6 @@
 <?php session_start();?>
 <?php
-    $db = new PDO("sqlite:database.db");
+    $db = new PDO("sqlite:" . __DIR__ . "/database.db");
     $comp = $db->query("SELECT * FROM competition WHERE id = $_GET[id]")->fetchAll();
     $comp = $comp[0]
 ?>
@@ -9,7 +9,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="content/static/style.css">
     <title><?php echo $comp["title"]; ?></title>
 </head>
 <body>

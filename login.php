@@ -4,17 +4,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="content/static/style.css">
     <title>Přihlášení</title>
 </head>
 <body>
+    <?php $db = new PDO("sqlite:" . __DIR__ . "/database.db"); ?>
     <?php include_once("header.php"); ?>
     <main class="login">
         <?php
             if(isset($_SESSION["username"])){
                 header("Location: /profile.php");
             }
-            $db = new PDO("sqlite:database.db");
+            
             if(isset($_POST["username"], $_POST["password"])){
                 $usr = strtolower($_POST["username"]);
                 $q = $db->query("SELECT id, password FROM user WHERE username = '$usr'");
