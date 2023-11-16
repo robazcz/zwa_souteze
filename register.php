@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="content/static/style.css">
+    <link rel="stylesheet" href="zwa/static/style.css">
     <title>Registrace</title>
 </head>
 <body>
@@ -41,7 +41,7 @@
                 $pswd = password_hash($_POST["password"], PASSWORD_BCRYPT);
                 $usr = strtolower($_POST["username"]);
                 $db->exec("INSERT INTO user (username, password) VALUES ('$usr', '$pswd')");
-                header("Location: /login.php");
+                header("Location: login");
             }
             //echo password_verify($_POST["password"], $pswd);
             
@@ -66,6 +66,6 @@
             <input type="submit" value="Registrovat">
         </form>
     </main>
-    <script src="script.js"></script>
+    <script src="zwa/static/script.js" type="text/javascript"></script>
 </body>
 </html>

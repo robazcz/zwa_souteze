@@ -1,4 +1,4 @@
-if(window.location.pathname == "/login.php"){
+if(window.location.pathname.includes("/login")){
     var error_elements = {
         login_username: "login_username_error",
         login_password: "login_password_error"
@@ -10,7 +10,7 @@ if(window.location.pathname == "/login.php"){
 
     document.getElementById("login_form").addEventListener("submit", submit_form);
 }
-else if(window.location.pathname == "/register.php"){
+else if(window.location.pathname.includes("/register")){
     var error_elements = {
         register_username: "register_username_error",
         register_password: "register_password_error",

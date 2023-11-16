@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="content/static/style.css">
+    <link rel="stylesheet" href="zwa/static/style.css">
     <title>Přihlášení</title>
 </head>
 <body>
@@ -13,7 +13,7 @@
     <main class="login">
         <?php
             if(isset($_SESSION["username"])){
-                header("Location: /profile.php");
+                header("Location: profile");
             }
             
             if(isset($_POST["username"], $_POST["password"])){
@@ -30,7 +30,7 @@
                             header("Location: $_POST[next]");
                         }
                         else{
-                            header("Location: /");
+                            header("Location: "); //vyzkoušet
                         }
                     }
                     else{
@@ -56,6 +56,6 @@
         </form>
         <?php //echo "<p>".$_SESSION["username"]."</p>"; ?>
     </main>
-    <script src="script.js"></script>
+    <script src="zwa/static/script.js" type="text/javascript"></script>
 </body>
 </html>

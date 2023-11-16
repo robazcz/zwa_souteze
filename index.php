@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="content/static/style.css">
+    <link rel="stylesheet" href="zwa/static/style.css">
     <title>Soutěže</title>
 </head>
 <body>
@@ -20,7 +20,7 @@
             echo "<hr></div>";
             foreach($st() as $i){
                 echo "<article>";
-                echo "<h3><a href='/competition?id=$i[id]'> $i[title] </a></h3>";
+                echo "<h3><a href='competition?id=$i[id]'> $i[title] </a></h3>";
                 echo "<div class='date_event'>".date_format(date_create($i["date_event"]), "d.  m. Y")."</div>";
                 echo "<div> $i[description] </div>";
                 echo "</article>";
@@ -34,7 +34,7 @@
             echo "<hr></div>";
             foreach($st as $i){
                 echo "<article>";
-                echo "<h3><a href='/competition?id=$i[id]'> $i[title] </a></h3>";
+                echo "<h3><a href='competition?id=$i[id]'> $i[title] </a></h3>";
                 echo "<div class='date_event'>".date_format(date_create($i["date_event"]), "d.  m. Y")."</div>";
                 echo "<div> $i[description] </div>";
                 echo "</article>";
