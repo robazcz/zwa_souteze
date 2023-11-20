@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="zwa/static/style.css">
     <title>Uživatelský profil</title>
 </head>
 <body>
@@ -15,20 +15,19 @@
                 echo $_SESSION["username"];
             }
             else{
-                header("Location: /login.php");
+                header("Location: login");
             }
 
             //odhlásit
             if(isset($_POST["logout"])){
                 unset($_SESSION["username"]);
-                header("Location: login.php");
+                header("Location: login");
             }
         ?>
-        <form action="/profile.php" method="post">
+        <form action="profile" method="post">
             <input type="hidden" name="logout">
             <input type="submit" value="Odhlásit se">
         </form>
     </main>
-    <script src="script.js"></script>
 </body>
 </html>

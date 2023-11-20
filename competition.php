@@ -2,7 +2,7 @@
 <?php
     $db = new PDO("sqlite:" . __DIR__ . "/database.db");
     $comp = $db->query("SELECT * FROM competition WHERE id = $_GET[id]")->fetchAll();
-    $comp = $comp[0]
+    $comp = $comp[0];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -55,12 +55,14 @@
             </div>
             <?php
             if(isset($_SESSION["username"])){
-                echo "<form method='POST' action='/upload.php'>";
+                echo "<form enctype='multipart/form-data' method='POST' action='upload_image'>";
                 echo "<label for='image_upload'>Nahrát obrázek: </label>";
-                echo "<input type='file' name='image' id='image_upload' multiple></form>";
+                echo "<input type='file' name='image' id='image_upload' multiple required>";
+                echo "<input type='hidden' name='competition_id' value=$comp[id]>";
+                echo "<input type='submit' value='Nahrát'></form>";
             }
             else{
-                echo "<p>Pro nahrávání obrázků se přihlašte</p>";
+                echo "<p>Pro nahrávání obrázků se přihlaste</p>";
             }
             ?>
         </article>

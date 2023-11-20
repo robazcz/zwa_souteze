@@ -18,7 +18,8 @@
             
             if(isset($_POST["username"], $_POST["password"])){
                 $usr = strtolower($_POST["username"]);
-                $q = $db->query("SELECT id, password FROM user WHERE username = '$usr'");
+                $q = $db->prepare("SELECT id, password FROM user WHERE username = ?");
+                $q->execute([$usr]);
                 $user = $q->fetch();
                 if(!$user){
                     $error["login"] = "Špatné přihlašovací údaje";                
@@ -26,11 +27,12 @@
                 else{
                     if (password_verify($_POST["password"], $user["password"])){
                         $_SESSION["username"] = $usr;
+                        $_SESSION["user_id"] = $user["id"];
                         if(isset($_POST["next"])){
                             header("Location: $_POST[next]");
                         }
                         else{
-                            header("Location: "); //vyzkoušet
+                            header("Location: home"); //vyzkoušet
                         }
                     }
                     else{
@@ -39,7 +41,7 @@
                 }
             }
             ?>
-        <form action="/login.php" method="post" id="login_form" class="login-box">
+        <form action="login" method="post" id="login_form" class="login-box">
             <?php echo isset($_GET["next"])? "<input type='hidden' name='next' value='$_GET[next]'>": "" ?>
             <div>
                 <label for="username">Uživatelské jméno</label>
@@ -52,7 +54,7 @@
                 <p id="login_password_error"><?php echo isset($error["login"])?$error["login"]:"";?></p>
             </div>
             <input type="submit" value="Přihlásit">
-            <div><a href="/register.php">registrace</a></div>
+            <div><a href="register">registrace</a></div>
         </form>
         <?php //echo "<p>".$_SESSION["username"]."</p>"; ?>
     </main>

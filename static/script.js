@@ -24,6 +24,8 @@ else if(window.location.pathname.includes("/register")){
 }
 
 function unfocus_input(){
+    console.log(`unfocused`);
+    console.log(this);
     if(this.value == ""){
         document.getElementById(error_elements[this.id]).innerHTML = "Pole musí být vyplněno";
         this.classList.add("error");

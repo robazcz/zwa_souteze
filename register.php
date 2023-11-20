@@ -47,7 +47,7 @@
             
         }
         ?>
-        <form action="/register.php" method="post" id="register_form" class="login-box">
+        <form action="register" method="post" id="register_form" class="login-box">
             <div>
                 <label for="username">Uživatelské jméno: </label>
                 <input type="text" name="username" id="register_username" autofocus value="<?php echo isset($_POST["username"])?htmlspecialchars($_POST["username"]):"";?>">
