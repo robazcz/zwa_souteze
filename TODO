@@ -1,18 +1,18 @@
-Kontrola dat na straně serveru
-Kontrola dat na straně klienta
-Povinné položky jsou jasně označeny
-Nesprávně vyplněná pole jsou označena a vysvětlena
-Po nesprávném odeslání je vrácen k opravě předvyplněn
+- Kontrola dat na straně serveru
+- Kontrola dat na straně klienta
+- Povinné položky jsou jasně označeny
+- Nesprávně vyplněná pole jsou označena a vysvětlena
+- Po nesprávném odeslání je vrácen k opravě předvyplněn
 Nahrání obrázku
-Ve formuláři existuje nejméně jedna závislost mezi vstupními poli. Tato závislost je kontrolována pomocí JavaScriptu.
+- Ve formuláři existuje nejméně jedna závislost mezi vstupními poli. Tato závislost je kontrolována pomocí JavaScriptu.
 
 
 100% validní HTML
 Všechna formulářová pole mají spárovaný <label>
-Styly jsou vyčleněny do samostatných souboru (souborů)
-Skripty jsou vyčleněny do souboru (souborů)
+- Styly jsou vyčleněny do samostatných souboru (souborů)
+- Skripty jsou vyčleněny do souboru (souborů)
 Smysluplné styly pro tisk
-Ajax
+- Ajax
 
 
 Server-side stránkování
@@ -33,11 +33,11 @@ Obsah je rozumně seřazen.
 
 
 Co
-Hesla nesmí být uložena v plaintextu
+- Hesla nesmí být uložena v plaintextu
 Aplikace nesmí obsahovat zranitelnosti XSS
 Při použití databáze nesmí aplikace obsahovat zranitelnosti SQL Injection
 Stránkování nesmí být realizováno jen v JavaScriptu
-Kód nesmí být duplicitní
+- Kód nesmí být duplicitní
 Reloadem stránky po odeslání formuláře nesmí dojít k opakovanému vložení dat
-Zákaz použití knihoven a frameworků třetích stran
-Obrázky, stejně jako případné další velké soubory, nejsou uloženy v databázi
+- Zákaz použití knihoven a frameworků třetích stran
+- Obrázky, stejně jako případné další velké soubory, nejsou uloženy v databázi

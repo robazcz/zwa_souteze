@@ -1,4 +1,13 @@
-<?php session_start(); ?>
+<?php 
+session_start(); 
+if(!isset($_SESSION["username"])){
+    header("Location: login");
+}
+if(isset($_POST["logout"])){
+    unset($_SESSION["username"]);
+    header("Location: login");
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,18 +20,7 @@
     <?php include_once("header.php"); ?>  
     <main>
         <?php
-            if (isset($_SESSION["username"])) {
-                echo $_SESSION["username"];
-            }
-            else{
-                header("Location: login");
-            }
-
-            //odhlásit
-            if(isset($_POST["logout"])){
-                unset($_SESSION["username"]);
-                header("Location: login");
-            }
+        echo $_SESSION["username"];
         ?>
         <form action="profile" method="post">
             <input type="hidden" name="logout">

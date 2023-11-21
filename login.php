@@ -1,4 +1,35 @@
-<?php session_start(); ?>
+<?php 
+session_start(); 
+if(isset($_SESSION["username"])){
+    header("Location: profile");
+}
+$db = new PDO("sqlite:" . __DIR__ . "/database.db");
+if(isset($_POST["username"], $_POST["password"])){
+    $usr = strtolower($_POST["username"]);
+    $q = $db->prepare("SELECT id, password FROM user WHERE username = ?");
+    $q->execute([$usr]);
+    $user = $q->fetch();
+    if(!$user){
+        $error["login"] = "Špatné přihlašovací údaje";                
+    }
+    else{
+        if (password_verify($_POST["password"], $user["password"])){
+            $_SESSION["username"] = $usr;
+            $_SESSION["user_id"] = $user["id"];
+            if(isset($_POST["next"])){
+                header("Location: $_POST[next]");
+            }
+            else{
+                header("Location: home"); //vyzkoušet
+            }
+        }
+        else{
+            $error["login"] = "Špatné přihlašovací údaje"; 
+        }
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,48 +39,17 @@
     <title>Přihlášení</title>
 </head>
 <body>
-    <?php $db = new PDO("sqlite:" . __DIR__ . "/database.db"); ?>
     <?php include_once("header.php"); ?>
     <main class="login">
-        <?php
-            if(isset($_SESSION["username"])){
-                header("Location: profile");
-            }
-            
-            if(isset($_POST["username"], $_POST["password"])){
-                $usr = strtolower($_POST["username"]);
-                $q = $db->prepare("SELECT id, password FROM user WHERE username = ?");
-                $q->execute([$usr]);
-                $user = $q->fetch();
-                if(!$user){
-                    $error["login"] = "Špatné přihlašovací údaje";                
-                }
-                else{
-                    if (password_verify($_POST["password"], $user["password"])){
-                        $_SESSION["username"] = $usr;
-                        $_SESSION["user_id"] = $user["id"];
-                        if(isset($_POST["next"])){
-                            header("Location: $_POST[next]");
-                        }
-                        else{
-                            header("Location: home"); //vyzkoušet
-                        }
-                    }
-                    else{
-                        $error["login"] = "Špatné přihlašovací údaje"; 
-                    }
-                }
-            }
-            ?>
         <form action="login" method="post" id="login_form" class="login-box">
             <?php echo isset($_GET["next"])? "<input type='hidden' name='next' value='$_GET[next]'>": "" ?>
             <div>
-                <label for="username">Uživatelské jméno</label>
+                <label for="username">Uživatelské jméno<div class="tooltip">*<span class="tooltiptext">Povinné pole</span></div></label>
                 <input type="text" name="username" id="login_username" autofocus value="<?php echo isset($_POST["username"])?htmlspecialchars($_POST["username"]):"";?>">
                 <p id="login_username_error"></p>
             </div>
             <div>
-                <label for="password">Heslo</label>
+                <label for="password">Heslo<div class="tooltip">*<span class="tooltiptext">Povinné pole</span></div></label>
                 <input type="password" name="password" id="login_password">
                 <p id="login_password_error"><?php echo isset($error["login"])?$error["login"]:"";?></p>
             </div>

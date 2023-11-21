@@ -24,8 +24,6 @@ else if(window.location.pathname.includes("/register")){
 }
 
 function unfocus_input(){
-    console.log(`unfocused`);
-    console.log(this);
     if(this.value == ""){
         document.getElementById(error_elements[this.id]).innerHTML = "Pole musí být vyplněno";
         this.classList.add("error");
@@ -40,8 +38,7 @@ function unfocus_input(){
             }
         }
         else if(this.id == "register_username"){
-            fetch("/check.php", {method: "POST", headers:{"Content-Type": "application/x-www-form-urlencoded"}, body: `username=${this.value}`}).then(res => res.json()).then(data => {
-                console.log(data)
+            fetch("check", {method: "POST", headers:{"Content-Type": "application/x-www-form-urlencoded"}, body: `username=${this.value}`}).then(res => res.json()).then(data => {
                 if(data.exist == "true"){
                     document.getElementById(error_elements[this.id]).innerHTML = "Jméno již existuje";
                     this.classList.add("error");

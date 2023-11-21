@@ -49,17 +49,17 @@
         ?>
         <form action="register" method="post" id="register_form" class="login-box">
             <div>
-                <label for="username">Uživatelské jméno: </label>
+                <label for="username">Uživatelské jméno<div class="tooltip">*<span class="tooltiptext">Povinné pole</span></div></label>
                 <input type="text" name="username" id="register_username" autofocus value="<?php echo isset($_POST["username"])?htmlspecialchars($_POST["username"]):"";?>">
                 <p id="register_username_error"><?php echo isset($error["username"])?$error["username"]:"";?></p>
             </div>
             <div>
-                <label for="password">Heslo: </label>
+                <label for="password">Heslo<div class="tooltip">*<span class="tooltiptext">Povinné pole</span></div></label>
                 <input type="password" name="password" id="register_password">
                 <p id="register_password_error"><?php echo isset($error["password"])?$error["password"]:"";?></p>
             </div>
             <div>
-                <label for="password_2">Heslo znovu: </label>
+                <label for="password_2">Heslo znovu<div class="tooltip">*<span class="tooltiptext">Povinné pole</span></div></label>
                 <input type="password" name="password_2" id="register_password_2">
                 <p id="register_password_2_error"><?php echo isset($error["password_2"])?$error["password_2"]:"";?></p>
             </div>
