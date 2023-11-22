@@ -1,3 +1,10 @@
+add_competition 
+    přestylovat
+    zakázat přístup nepřihlášením
+    ve scriptu udělat checking obdobně jako v registraci
+
+
+
 - Kontrola dat na straně serveru
 - Kontrola dat na straně klienta
 - Povinné položky jsou jasně označeny

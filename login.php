@@ -42,6 +42,7 @@ if(isset($_POST["username"], $_POST["password"])){
     <?php include_once("header.php"); ?>
     <main class="login">
         <form action="login" method="post" id="login_form" class="login-box">
+            <h3>Přihásit</h3>
             <?php echo isset($_GET["next"])? "<input type='hidden' name='next' value='$_GET[next]'>": "" ?>
             <div>
                 <label for="username">Uživatelské jméno<div class="tooltip">*<span class="tooltiptext">Povinné pole</span></div></label>

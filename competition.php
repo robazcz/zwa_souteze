@@ -16,13 +16,13 @@
     <?php include_once("header.php"); ?>
     <main class="comp">
         <article>
-            <div class="comp-name-line"><h2><?php echo $comp["title"] ?></h2> <em><?php echo date_format(date_create($comp["date_event"]), 'j. n. Y') ?></em></div>
+            <div class="comp-name-line"><h2><?php echo htmlspecialchars($comp["title"]) ?></h2> <em><?php echo date_format(date_create($comp["date_event"]), 'j. n. Y G:i') ?></em></div>
             <hr>
-            <p>místo konání: <em><?php echo $comp["town"] ?></em></p>
-            <p>propozice: <em><?php echo $comp["proposition"] ?></em></p>
-            <p><?php echo $comp["description"] ?></p>
+            <p><strong>místo konání:</strong><em class="comp-info"><?php echo htmlspecialchars($comp["town"]) ?></em></p>
+            <p><strong>propozice:</strong><em class="comp-info"><?php echo $comp["proposition"] ?></em></p>
+            <p><?php echo htmlspecialchars($comp["description"]) ?></p>
             <div>
-                <p>Výsledky</p>
+                <strong>Výsledky</strong>
                 <?php
                     if(!is_null($comp["id_results"])){
                         $categories = $db->query("SELECT * FROM category")->fetchAll();
@@ -37,8 +37,9 @@
                         foreach($vysledky as $key => $vysledek){
                             if($vysledek){
                                 $rowcount = 1;
-                                echo "<table>";
-                                echo "<tr><th colspan=3>".$categories[$key-1]["name"]."</th></tr>";
+                                echo "<table class='results'>";
+                                echo "<tr><th colspan=3>".mb_strtoupper($categories[$key-1]["name"])."</th></tr>";
+                                echo "<tr><th>Pořadí</th><th>Družstvo</th><th>Čas</th>";
                                 foreach( $vysledek as $result ) {
                                     echo "<tr><td>$rowcount</td><td>$result[name]</td><td>".number_format($result["time_run"],2,",")."</td></tr>";
                                     $rowcount++;

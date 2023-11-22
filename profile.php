@@ -20,8 +20,11 @@ if(isset($_POST["logout"])){
     <?php include_once("header.php"); ?>  
     <main>
         <?php
-        echo $_SESSION["username"];
+        echo "<h3>$_SESSION[username]</h3>";
+        echo "<div>Mnou přidané soutěže:";
+        echo "</div>";
         ?>
+        
         <form action="profile" method="post">
             <input type="hidden" name="logout">
             <input type="submit" value="Odhlásit se">

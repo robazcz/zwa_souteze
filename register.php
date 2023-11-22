@@ -1,4 +1,37 @@
-<?php session_start(); ?>
+<?php 
+session_start();
+$db = new PDO("sqlite:" . __DIR__ . "/database.db");
+if(isset($_POST["username"], $_POST["password"], $_POST["password_2"])){
+    if(empty($_POST["username"])){
+        $error["username"] = "Pole nemůže být prázdné";
+    }
+    else{
+        $q = $db->prepare("SELECT count(id) FROM user WHERE username = '$_POST[username]'");
+        $q->execute();
+        if ($q->fetchColumn() > 0){
+            $error["username"] = "Jméno již existuje";
+        }
+        if (preg_match("/^[a-zA-Z0-9-_.]+$/", $_POST["username"]) == 0){
+            $error["username"] = "Jméno obsahuje zakázané znaky";
+        }
+    }
+    if(empty($_POST["password"])){
+        $error["password"] = "Pole nemůže být prázdné";
+    }
+    else{
+        if($_POST["password"] != $_POST["password_2"]){
+            $error["password_2"] = "Hesla se neshodují";
+        }
+    }
+
+    if(!(isset($error["username"]) | isset($error["password"]) | isset($error["password_2"]))){
+        $pswd = password_hash($_POST["password"], PASSWORD_BCRYPT);
+        $usr = strtolower($_POST["username"]);
+        $db->exec("INSERT INTO user (username, password) VALUES ('$usr', '$pswd')");
+        header("Location: login");
+    }    
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,46 +41,10 @@
     <title>Registrace</title>
 </head>
 <body>
-    <?php $db = new PDO("sqlite:" . __DIR__ . "/database.db"); ?>
     <?php include_once("header.php"); ?>  
     <main class="login">
-        <?php
-        if(isset($_POST["username"], $_POST["password"], $_POST["password_2"])){
-            if(empty($_POST["username"])){
-                $error["username"] = "Pole nemůže být prázdné";
-            }
-            else{
-                //echo "SELECT id FROM user WHERE username = '$_POST[username]'";
-                $q = $db->prepare("SELECT count(id) FROM user WHERE username = '$_POST[username]'");
-                $q->execute();
-                //print_r($q->fetchAll());
-                if ($q->fetchColumn() > 0){
-                    $error["username"] = "Jméno již existuje";
-                }
-                if (preg_match("/^[a-zA-Z0-9-_.]+$/", $_POST["username"]) == 0){
-                    $error["username"] = "Jméno obsahuje zakázané znaky";
-                }
-            }
-            if(empty($_POST["password"])){
-                $error["password"] = "Pole nemůže být prázdné";
-            }
-            else{
-                if($_POST["password"] != $_POST["password_2"]){
-                    $error["password_2"] = "Hesla se neshodují";
-                }
-            }
-
-            if(!(isset($error["username"]) | isset($error["password"]) | isset($error["password_2"]))){
-                $pswd = password_hash($_POST["password"], PASSWORD_BCRYPT);
-                $usr = strtolower($_POST["username"]);
-                $db->exec("INSERT INTO user (username, password) VALUES ('$usr', '$pswd')");
-                header("Location: login");
-            }
-            //echo password_verify($_POST["password"], $pswd);
-            
-        }
-        ?>
         <form action="register" method="post" id="register_form" class="login-box">
+            <h3>Registrovat</h3>
             <div>
                 <label for="username">Uživatelské jméno<div class="tooltip">*<span class="tooltiptext">Povinné pole</span></div></label>
                 <input type="text" name="username" id="register_username" autofocus value="<?php echo isset($_POST["username"])?htmlspecialchars($_POST["username"]):"";?>">

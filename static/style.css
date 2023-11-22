@@ -73,10 +73,11 @@ a{
     justify-content: center;
     border: solid 2px black;
     padding: 1em;
+    min-width: 35vw;
     /* min-width: 20em; */
 }
 
-.login-box input{
+.login-box input, .login-box textarea{
     width: 100%;
     padding: 5px;
     margin: 0;
@@ -95,6 +96,10 @@ a{
     height: .9em;
 }
 
+.login-box label{
+    display: block;
+}
+
 .login-box input.error{
     border-color: red;
 }
@@ -103,7 +108,7 @@ main.login{
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 3em 0;
+    padding-top: 3em;
 }
 
 .comp-name-line p, .comp-name-line h2{
@@ -150,4 +155,43 @@ main.login{
   /* Show the tooltip text when you mouse over the tooltip container */
 .tooltip:hover .tooltiptext {
     visibility: visible;
+}
+
+.comp .comp-info{
+    display: block;
+}
+
+.comp .results th{
+    padding: .4em 1em 0;
+    border-bottom: black 1px solid;
+}
+
+.comp .results td{
+    text-align: center;
+    padding: .4em 0 0;
+    border: black 1px solid;
+    border-left: none;
+    border-right: none;
+}
+
+.comp .results table{
+    border-collapse: collapse;
+}
+
+main.add-comp{
+    display: flex;
+    padding: 1em 1em;
+}
+
+.add-comp .login-box > div{
+    margin-bottom: 1em;
+}
+
+.add-comp .login-box{
+    min-width: 50vw;
+    border: none;
+}
+
+textarea{
+    font-family: 'Helvetica', 'Arial', sans-serif;
 }
