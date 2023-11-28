@@ -3,6 +3,12 @@
     background-color: #a6a6a6;
 }
 
+@media print{
+    .navbar{
+        display: none;
+    }
+}
+
 .navbar ul{
     list-style-type: none;
     margin: 0;
@@ -54,6 +60,10 @@ a{
     color: black;
 }
 
+.comp a{
+    text-decoration: underline;
+}
+
 .separator-div{
     margin: 0 2em 1em;
 }
@@ -73,8 +83,8 @@ a{
     justify-content: center;
     border: solid 2px black;
     padding: 1em;
-    min-width: 35vw;
-    /* min-width: 20em; */
+    width: 35vw;
+    max-width: 23em;
 }
 
 .login-box input, .login-box textarea{
@@ -194,4 +204,21 @@ main.add-comp{
 
 textarea{
     font-family: 'Helvetica', 'Arial', sans-serif;
+}
+
+.comp .row{
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0 4px;
+}
+
+.comp .col{
+    flex: 20%;
+    padding: 0 4px;
+}
+
+.comp .col img{
+    margin-top: 8px;
+    vertical-align: middle;
+    width: 100%;
 }

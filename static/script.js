@@ -22,6 +22,18 @@ else if(window.location.pathname.includes("/register")){
     }
     document.getElementById("register_form").addEventListener("submit", submit_form);
 }
+else if(window.location.pathname.includes("/add_competition")){
+    var error_elements = {
+        comp_title: "comp_title_error",
+        comp_date_event: "comp_date_event_error",
+        comp_town: "comp_town_error"
+    }
+
+    for(let key in error_elements){
+        document.getElementById(key).addEventListener("focusout", unfocus_input);
+    }
+    document.getElementById("add_comp_form").addEventListener("submit", submit_form);
+}
 
 function unfocus_input(){
     if(this.value == ""){

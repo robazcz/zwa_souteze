@@ -1,22 +1,24 @@
 <?php
     session_start();
-    if(isset($_FILES["image"])){
-
-        $db = new PDO("sqlite:" . __DIR__ . "/database.db");
-        $pict = $db->query("SELECT max(id) FROM photo");
-        $id_pict = $pict->fetch()[0];
-
-        if(!$id_pict){
-            $id_pict = 0;
+    if(isset($_FILES["image"]) && !empty(isset($_FILES["image"]))){
+        if(isset($_FILES["image"]) && is_uploaded_file($_FILES["image"]["tmp_name"])){
+            if($_FILES["image"]["size"] > 20000000){ // 20MB
+                $error["image"] = "Velikost souboru je moc velká";
+            }
+            switch(strtolower(pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION))){
+                case "png":
+                case "jpg":
+                case "jpeg":
+                case "gif":
+                    break;
+                default:
+                    $error["image"] = "Podporované formáty jsou pouze .png, .jpg, .jpeg a .gif";
+                    break;
+            }
         }
-        else{
-            $id_pict++;
-        }
-
-        $file_name = $id_pict . "-" . basename($_FILES["image"]["name"]);
-        $file_target = __DIR__."/uploads/$file_name";
-        echo $file_target;
-        print_r($_FILES);
+        
+        $file_name = basename($_FILES["image"]["name"]);
+        $file_target = __DIR__."/uploads/$_POST[competition_id]/$file_name";
 
         if(move_uploaded_file($_FILES["image"]["tmp_name"], $file_target)){
             $add_img = $db->prepare("INSERT INTO photo (id_user, id_competition, name) VALUES (?, ?, ?)");

@@ -13,21 +13,21 @@
     <main>
         <?php
 
-        $q = $db->query("SELECT * FROM competition WHERE date_created > date()");
+        $q = $db->query("SELECT * FROM competition WHERE date_created > datetime()");
         $st = $q->fetchAll(PDO::FETCH_ASSOC);
         if(!empty($st)) {
             echo "<div class='separator-div'><p class='separator-text'>Nadcházející</p>";
             echo "<hr></div>";
-            foreach($st() as $i){
+            foreach($st as $i){
                 echo "<article>";
                 echo "<h3><a href='competition?id=$i[id]'> $i[title] </a></h3>";
-                echo "<div class='date_event'>".date_format(date_create($i["date_event"]), "d.  m. Y")."</div>";
+                echo "<div class='date_event'>".date_format(date_create($i["date_event"]), "j. n. Y G:i")."</div>";
                 echo "<div> $i[description] </div>";
                 echo "</article>";
             }
         }
 
-        $q = $db->query("SELECT * FROM competition WHERE date_created < date()");
+        $q = $db->query("SELECT * FROM competition WHERE date_created < datetime()");
         $st = $q->fetchAll(PDO::FETCH_ASSOC);
         if(!empty($st)){
             echo "<div class='separator-div'><p class='separator-text'>Proběhlé</p>";
@@ -35,7 +35,7 @@
             foreach($st as $i){
                 echo "<article>";
                 echo "<h3><a href='competition?id=$i[id]'> $i[title] </a></h3>";
-                echo "<div class='date_event'>".date_format(date_create($i["date_event"]), "d.  m. Y")."</div>";
+                echo "<div class='date_event'>".date_format(date_create($i["date_event"]), "j. n. Y G:i")."</div>";
                 echo "<div> $i[description] </div>";
                 echo "</article>";
             }

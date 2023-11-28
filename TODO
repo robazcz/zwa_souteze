@@ -1,7 +1,17 @@
+upload
+    překopat to do složky id_soutěže
+    kontola přípony
+    kontrola velikosti
+
 add_competition 
     přestylovat
-    zakázat přístup nepřihlášením
-    ve scriptu udělat checking obdobně jako v registraci
+    zakázat přístup nepřihlášeným
+    - ve scriptu udělat checking obdobně jako v registraci
+    php validate data
+    před jmého propozic dát id
+
+competition
+    zobrazení obrázků
 
 
 
