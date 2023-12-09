@@ -5,6 +5,10 @@
     $db = new PDO("sqlite:" . __DIR__ . "/database.db");
     $comp = $db->query("SELECT * FROM competition WHERE id = $_GET[id]")->fetchAll();
     $comp = $comp[0];
+
+    if(!$comp){
+        header("Location: home");
+    }
     
     if(isset($_FILES["image"]) && !empty(isset($_FILES["image"]))){
         foreach($_FILES["image"]["tmp_name"] as $key=>$value){
@@ -27,7 +31,7 @@
                         $error["image"] = "Podporované formáty jsou pouze .png, .jpg, .jpeg a .gif";
                         break;
                 }
-                if(!$error){
+                if(!isset($error)){
                     $file_target = __DIR__."/uploads/$comp[id]/$file_name";
                     
                     if(move_uploaded_file($value, $file_target)){
@@ -47,6 +51,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="zwa/static/style.css">
+    <link rel="icon" type="image/x-icon" href="zwa/static/favicon.ico">
     <title><?php echo $comp["title"]; ?></title>
 </head>
 <body>
@@ -55,30 +60,42 @@
         <article>
             <div class="comp-name-line"><h2><?php echo htmlspecialchars($comp["title"]) ?></h2> <em><?php echo date_format(date_create($comp["date_event"]), 'j. n. Y G:i') ?></em></div>
             <hr>
-            <p><strong>místo konání:</strong><em class="comp-info"><?php echo htmlspecialchars($comp["town"]) ?></em></p>
-            <p><strong>propozice:</strong><a href="<?php echo "zwa/uploads/$comp[id]/$comp[proposition]" ?>"><em class="comp-info"><?php echo $comp["proposition"] ?></em></a></p>
+            <p><strong>Místo konání:</strong><em class="comp-info"><?php echo htmlspecialchars($comp["town"]) ?></em></p>
+            <p><strong>Propozice:</strong><a href="<?php echo "zwa/uploads/$comp[id]/$comp[proposition]" ?>"><em class="comp-info"><?php echo $comp["proposition"] ?></em></a></p>
             <p><?php echo htmlspecialchars($comp["description"]) ?></p>
-            <div>
+            <p>
                 <strong>Výsledky</strong>
                 <?php
                     if(!is_null($comp["id_results"])){
+                        // Upravování výsledků
+                        // if(isset($_SESSION["user_id"])){
+                        //     if($db->query("SELECT id_user FROM results WHERE id = $comp[id_results]")->fetchColumn() == $_SESSION["user_id"]){
+                        //         echo "<a class='block' href='add_results?competition=$comp[id]'>Upravit výsledky</a>";
+                        //     }
+                        // }
                         $categories = $db->query("SELECT * FROM category")->fetchAll();
                         //$results = $db->query("SELECT * FROM result WHERE id_results = $comp[id_results]"); // všechny výsledky pro soutěž
-                        $vysledky = [];
+                        $results = [];
                         foreach ($categories as $category) {
-                            $results = $db->query("SELECT * FROM result r, team t where r.id_team = t.id and t.id_category = $category[id] and r.id_results = $comp[id_results] ORDER BY time_run ASC");
-                            $results = $results->fetchAll();
-                            $vysledky[$category["id"]] = $results;
+                            $results_db = $db->query("SELECT * FROM result r, team t where r.id_team = t.id and t.id_category = $category[id] and r.id_results = $comp[id_results] ORDER BY r.valid_run DESC, r.time_run ASC");
+                            $results_db = $results_db->fetchAll();
+                            $results[$category["id"]] = $results_db;
                         }
                         echo "<div class='results'>";
-                        foreach($vysledky as $key => $vysledek){
-                            if($vysledek){
+                        
+                        foreach($results as $key => $cat_result){
+                            if($cat_result){
                                 $rowcount = 1;
                                 echo "<table class='results'>";
                                 echo "<tr><th colspan=3>".mb_strtoupper($categories[$key-1]["name"])."</th></tr>";
                                 echo "<tr><th>Pořadí</th><th>Družstvo</th><th>Čas</th>";
-                                foreach( $vysledek as $result ) {
-                                    echo "<tr><td>$rowcount</td><td>$result[name]</td><td>".number_format($result["time_run"],2,",")."</td></tr>";
+                                foreach( $cat_result as $result ) {
+                                    if($result["valid_run"] == 1){
+                                        echo "<tr><td>$rowcount</td><td>$result[name]</td><td>".number_format($result["time_run"],2,",")."</td></tr>";
+                                    }
+                                    else{
+                                        echo "<tr><td>$rowcount</td><td>$result[name]</td><td>NP</td></tr>";
+                                    }
                                     $rowcount++;
                                 }
                                 echo "</table>";
@@ -88,27 +105,32 @@
                     }
                     else{
                         if(isset($_SESSION["username"])){
-                            echo "<a>přidat výsledky</a>";
+                            echo "<a class='block' href='add_results?competition=$comp[id]'>Přidat výsledky</a>";
                         }
                         else{
-                            echo "<p><em>Pro přidávání výsledků se přihlaste</em></p>";
+                            echo "<em class='block'>Pro přidávání výsledků se přihlaste</em>";
                         }
                     }
                 ?>
-            </div>
+            </p>
+            <p>
             <?php
             if(isset($_SESSION["username"])){
                 echo "<form enctype='multipart/form-data' method='POST' action=''>";
                 echo "<label for='image_upload'>Nahrát obrázek: </label>";
                 echo "<input type='file' name='image[]' id='image_upload' multiple required>";
-                echo "<p>".$error?$error["image"]:''."</p>";
+                if(isset($error["image"])){
+                    echo "<p class='error-text'>$error[image]</p>";
+                }
                 echo "<input type='hidden' name='competition_id' value=$comp[id]>";
-                echo "<input type='submit' value='Nahrát'></form>";
+                echo "<input type='submit' value='Nahrát' class='block'></form>";
             }
             else{
-                echo "<p><em>Pro nahrávání obrázků se přihlaste</em></p>";
+                echo "<em>Pro nahrávání obrázků se přihlaste</em>";
             }
-            
+            ?>
+            </p>
+            <?php
             $pictures = $db->query("SELECT name FROM photo WHERE id_competition == $comp[id]")->fetchAll();
             //$count = count($pictures);
 
@@ -122,19 +144,6 @@
                 }
                 echo "</div>";
             }
-            // echo "</div>";
-
-            //     echo "<div class='row'>";
-            //     for($c = 0; $c < 4; $c++){
-            //         echo "<div class='col'>";
-            //         $divident = 4;
-            //         $exp = count($pictures)%$divident > 1%$divident?ceil(count($pictures)/$divident):count($pictures)/$divident;
-            //         for($i = 1; $i <= $exp; $i++){// vyřešit líp!
-            //             echo "<img src='zwa/uploads/$comp[id]/".$pictures[$pic_pos][0]."' alt='$pic[0]'>";
-            //             $pic_pos++;
-            //         }
-            //         echo "</div>";
-            //     }
             ?>
         </article>
     </main>

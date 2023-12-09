@@ -99,7 +99,7 @@ a{
     float: right;
 }
 
-.login-box p{
+.login-box p, .error-text{
     color: red;
     margin: 0 0 .5em;
     font-size: .9em;
@@ -221,4 +221,47 @@ textarea{
     margin-top: 8px;
     vertical-align: middle;
     width: 100%;
+}
+
+.block{
+    display: block;
+}
+
+.category-list-hid, .disnone{
+    display: none;
+}
+
+.category-list, .disblock{
+    display: block;
+}
+
+.labels{
+    display: flex;
+    flex-direction: row;
+}
+
+.add-comp .login-box input[type=checkbox]{
+    width: auto;
+    margin: 10px;
+    width: 2em;
+    height: 2em;
+}
+
+.add-comp .login-box{
+    width: 100%;
+    max-width: none;
+}
+
+.category-list .liflex{
+    display: flex;
+}
+
+.add-comp .login-box input{
+    width: auto;
+    margin: 10px;
+}
+
+.add-comp .login-box input.time{
+    width: 6em;
+    margin: 10px;
 }

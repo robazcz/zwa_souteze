@@ -45,7 +45,7 @@
                     $error["proposition"] = "Soubor se nepodařilo uložit";
                 }
             }
-            if(!$error){
+            if(!isset($error)){
                 $new_comp = $db->prepare("INSERT INTO competition (id_user, title, description, date_event, town, proposition) VALUES (?, ?, ?, ?, ?, ?)");
                 //echo "ukládám $_SESSION[user_id], $_POST[title], $_POST[description], $_POST[date_event], $_POST[town], $prop_file";
                 $new_comp->execute([$_SESSION["user_id"], $_POST["title"], $_POST["description"], $_POST["date_event"], $_POST["town"], $prop_file]);
@@ -61,6 +61,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="zwa/static/style.css">
+    <link rel="icon" type="image/x-icon" href="zwa/static/favicon.ico">
     <title>Přidat soutěž</title>
 </head>
 <body>

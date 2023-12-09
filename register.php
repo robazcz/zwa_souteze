@@ -38,6 +38,7 @@ if(isset($_POST["username"], $_POST["password"], $_POST["password_2"])){
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="zwa/static/style.css">
+    <link rel="icon" type="image/x-icon" href="zwa/static/favicon.ico">
     <title>Registrace</title>
 </head>
 <body>

@@ -1,26 +1,26 @@
-upload
-    překopat to do složky id_soutěže
-    kontola přípony
-    kontrola velikosti
+upload / competition
+    - překopat to do složky id_soutěže
+    - kontola přípony
+    - kontrola velikosti
 
 add_competition 
-    přestylovat
-    zakázat přístup nepřihlášeným
+    - přestylovat
+    - zakázat přístup nepřihlášeným
     - ve scriptu udělat checking obdobně jako v registraci
-    php validate data
-    před jmého propozic dát id
+    - php validate data
 
 competition
-    zobrazení obrázků
+    - zobrazení obrázků
 
-
+add_results
+    - datalist při napsání něčeho do inputu udělá ajax a vypíše z databáze všechny možnosti
 
 - Kontrola dat na straně serveru
 - Kontrola dat na straně klienta
 - Povinné položky jsou jasně označeny
 - Nesprávně vyplněná pole jsou označena a vysvětlena
 - Po nesprávném odeslání je vrácen k opravě předvyplněn
-Nahrání obrázku
+- Nahrání obrázku
 - Ve formuláři existuje nejméně jedna závislost mezi vstupními poli. Tato závislost je kontrolována pomocí JavaScriptu.
 
 
@@ -45,9 +45,6 @@ Programátorská dokumentace
 
 Datumy jsou v lidsky čitelné podobě. 
 Obsah je rozumně seřazen. 
-
-
-
 
 Co
 - Hesla nesmí být uložena v plaintextu
