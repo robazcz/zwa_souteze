@@ -32,8 +32,8 @@ Smysluplné styly pro tisk
 - Ajax
 
 
-Server-side stránkování
-Existuje výpis uživatelem vložených dat
+- Server-side stránkování
+- Existuje výpis uživatelem vložených dat
 Existuje možnost editace uživatelem vložených dat
 Data na serveru jsou do úložiště (souboru, databáze) vložena tak, jak opravdu napsal uživatel.
 

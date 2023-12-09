@@ -1,4 +1,6 @@
-<?php session_start();?>
+<?php session_start();
+include("functions.php");
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,35 +14,45 @@
     <?php $db = new PDO("sqlite:" . __DIR__ . "/database.db"); ?>
     <?php include_once("header.php"); ?>
     <main>
-        <?php
-
-        $q = $db->query("SELECT * FROM competition WHERE date_created > datetime()");
-        $st = $q->fetchAll(PDO::FETCH_ASSOC);
-        if(!empty($st)) {
-            echo "<div class='separator-div'><p class='separator-text'>Nadcházející</p>";
-            echo "<hr></div>";
-            foreach($st as $i){
-                echo "<article>";
-                echo "<h3><a href='competition?id=$i[id]'> $i[title] </a></h3>";
-                echo "<div class='date_event'>".date_format(date_create($i["date_event"]), "j. n. Y G:i")."</div>";
-                echo "<div> $i[description] </div>";
-                echo "</article>";
+    <?php
+        $limit = 5;
+        $site = 1;
+        if(isset($_GET["limit"])){
+            if(is_numeric($_GET["limit"])){
+                $limit = intval($_GET["limit"]);
+            }
+        }
+        if(isset($_GET["site"])){
+            if(is_numeric($_GET["site"])){
+                $site = intval($_GET["site"]);
             }
         }
 
-        $q = $db->query("SELECT * FROM competition WHERE date_created < datetime()");
-        $st = $q->fetchAll(PDO::FETCH_ASSOC);
-        if(!empty($st)){
-            echo "<div class='separator-div'><p class='separator-text'>Proběhlé</p>";
-            echo "<hr></div>";
-            foreach($st as $i){
-                echo "<article>";
-                echo "<h3><a href='competition?id=$i[id]'> $i[title] </a></h3>";
-                echo "<div class='date_event'>".date_format(date_create($i["date_event"]), "j. n. Y G:i")."</div>";
-                echo "<div> $i[description] </div>";
-                echo "</article>";
+        $q_count = $db->query("SELECT count(id) FROM competition");
+        $comp_count = $q_count->fetchColumn();
+
+        echo "<div class='page_nums'>";
+        if($site > 1){
+            echo "<a href=home?site=". $site - 1 ."&limit=$limit>&lt;</a>";
+        }
+        for($s = 0; $s*$limit < $comp_count; $s++){
+            if($s+1 == $site){
+                echo "<span>". $s+1 ."</span>";
+            }
+            else{
+                echo "<a href=home?site=". $s+1 ."&limit=$limit>". $s+1 ."</a>";
             }
         }
+        if($site < $s){
+            echo "<a href=home?site=". $site + 1 ."&limit=$limit>&gt;</a>";
+        }
+        echo "</div>";
+
+        $q = $db->query("SELECT * FROM competition ORDER BY date_event DESC LIMIT $limit OFFSET ".$limit*($site-1));
+        $compets = $q->fetchAll(PDO::FETCH_ASSOC);
+        
+        print_competitions($compets);
+
     ?>
     </main>
 </body>

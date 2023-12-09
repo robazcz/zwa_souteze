@@ -1,13 +1,15 @@
 <?php 
 session_start();
 $db = new PDO("sqlite:" . __DIR__ . "/database.db");
+
 if(isset($_POST["username"], $_POST["password"], $_POST["password_2"])){
     if(empty($_POST["username"])){
         $error["username"] = "Pole nemůže být prázdné";
     }
     else{
-        $q = $db->prepare("SELECT count(id) FROM user WHERE username = '$_POST[username]'");
-        $q->execute();
+        $q = $db->prepare("SELECT count(id) FROM user WHERE username = ?");
+        $q->execute([$_POST["username"]]);
+
         if ($q->fetchColumn() > 0){
             $error["username"] = "Jméno již existuje";
         }
@@ -15,6 +17,7 @@ if(isset($_POST["username"], $_POST["password"], $_POST["password_2"])){
             $error["username"] = "Jméno obsahuje zakázané znaky";
         }
     }
+
     if(empty($_POST["password"])){
         $error["password"] = "Pole nemůže být prázdné";
     }

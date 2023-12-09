@@ -269,3 +269,27 @@ textarea{
 .uppercase{
     text-transform: uppercase;
 }
+
+.page_nums{
+    border: solid 1px black;
+    display: inline-block;
+    padding: 5px 10px;
+    margin: .5em 0 0 1em;
+}
+
+.page_nums a, .page_nums span{
+    padding: 5px 2px;
+}
+
+.page_nums span{
+    background-color: #ededed;
+}
+
+.page_nums a:hover{
+    background-color: #e6e6e6; 
+}
+
+main.profile h2, main.profile input, main.profile > div{
+    margin: 1rem 0 0 1rem;
+}
+

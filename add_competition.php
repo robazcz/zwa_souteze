@@ -3,8 +3,10 @@
     if(!isset($_SESSION["username"])){
         header("Location: login?next=add_competition");
     }
+    
     $db = new PDO("sqlite:" . __DIR__ . "/database.db");
     $error = array();
+
     if(isset($_POST["title"], $_POST["date_event"], $_POST["town"])){
         if(empty($_POST["title"])) {
             $error["title"] = "Pole nemůže být prázdné";
@@ -48,7 +50,7 @@
             if(!isset($error)){
                 $new_comp = $db->prepare("INSERT INTO competition (id_user, title, description, date_event, town, proposition) VALUES (?, ?, ?, ?, ?, ?)");
                 //echo "ukládám $_SESSION[user_id], $_POST[title], $_POST[description], $_POST[date_event], $_POST[town], $prop_file";
-                $new_comp->execute([$_SESSION["user_id"], $_POST["title"], $_POST["description"], $_POST["date_event"], $_POST["town"], $prop_file]);
+                $new_comp->execute([$_SESSION["user_id"], $_POST["title"], $_POST["description"], strtotime($_POST["date_event"]), $_POST["town"], $prop_file]);
                 Header("Location: home");
             }
         }
