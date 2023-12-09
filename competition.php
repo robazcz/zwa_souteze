@@ -87,7 +87,7 @@
                             if($cat_result){
                                 $rowcount = 1;
                                 echo "<table class='results'>";
-                                echo "<tr><th colspan=3>".mb_strtoupper($categories[$key-1]["name"])."</th></tr>";
+                                echo "<tr><th colspan=3 class='uppercase'>".$categories[$key-1]["name"]."</th></tr>";
                                 echo "<tr><th>Pořadí</th><th>Družstvo</th><th>Čas</th>";
                                 foreach( $cat_result as $result ) {
                                     if($result["valid_run"] == 1){

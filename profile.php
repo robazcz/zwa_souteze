@@ -1,10 +1,10 @@
 <?php 
 session_start(); 
-if(!isset($_SESSION["username"])){
-    header("Location: login");
-}
 if(isset($_POST["logout"])){
     unset($_SESSION["username"]);
+    header("Location: login");
+}
+if(!isset($_SESSION["username"])){
     header("Location: login");
 }
 ?>
@@ -21,9 +21,11 @@ if(isset($_POST["logout"])){
     <?php include_once("header.php"); ?>  
     <main>
         <?php
-        echo "<h3>$_SESSION[username]</h3>";
-        echo "<div>Mnou přidané soutěže:";
-        echo "</div>";
+        if(isset($_SESSION["username"])){
+            echo "<h3>$_SESSION[username]</h3>";
+            echo "<div>Mnou přidané soutěže:";
+            echo "</div>";
+        }
         ?>
         
         <form action="profile" method="post">
