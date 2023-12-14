@@ -50,23 +50,23 @@ if(isset($_POST["username"], $_POST["password"], $_POST["password_2"])){
         <form action="register" method="post" id="register_form" class="login-box">
             <h3>Registrovat</h3>
             <div>
-                <label for="username">Uživatelské jméno<div class="tooltip">*<span class="tooltiptext">Povinné pole</span></div></label>
-                <input type="text" name="username" id="register_username" autofocus value="<?php echo isset($_POST["username"])?htmlspecialchars($_POST["username"]):"";?>">
+                <label for="register_username">Uživatelské jméno<span class="tooltip">*<span class="tooltiptext">Povinné pole</span></span></label>
+                <input type="text" name="username" id="register_username" required autofocus value="<?php echo isset($_POST["username"])?htmlspecialchars($_POST["username"]):"";?>">
                 <p id="register_username_error"><?php echo isset($error["username"])?$error["username"]:"";?></p>
             </div>
             <div>
-                <label for="password">Heslo<div class="tooltip">*<span class="tooltiptext">Povinné pole</span></div></label>
-                <input type="password" name="password" id="register_password">
+                <label for="register_password">Heslo<span class="tooltip">*<span class="tooltiptext">Povinné pole</span></span></label>
+                <input type="password" name="password" id="register_password" required>
                 <p id="register_password_error"><?php echo isset($error["password"])?$error["password"]:"";?></p>
             </div>
             <div>
-                <label for="password_2">Heslo znovu<div class="tooltip">*<span class="tooltiptext">Povinné pole</span></div></label>
-                <input type="password" name="password_2" id="register_password_2">
+                <label for="register_password_2">Heslo znovu<span class="tooltip">*<span class="tooltiptext">Povinné pole</span></span></label>
+                <input type="password" name="password_2" id="register_password_2" required>
                 <p id="register_password_2_error"><?php echo isset($error["password_2"])?$error["password_2"]:"";?></p>
             </div>
             <input type="submit" value="Registrovat">
         </form>
     </main>
-    <script src="zwa/static/script.js" type="text/javascript"></script>
+    <script src="zwa/static/script.js"></script>
 </body>
 </html>

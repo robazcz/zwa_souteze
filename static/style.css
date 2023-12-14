@@ -87,16 +87,29 @@ a{
     max-width: 23em;
 }
 
-.login-box input, .login-box textarea{
+.login-box input{
     width: 100%;
     padding: 5px;
     margin: 0;
     box-sizing: border-box;
 }
 
+.login-box textarea{
+    padding: 5px;
+    margin: 10px;
+    box-sizing: border-box;
+    width: 50vw;
+    min-width: 20em;
+}
+
 .login-box a{
     text-decoration: underline;
     float: right;
+}
+
+.add-comp .login-box a{
+    float: none;
+    display: block;
 }
 
 .login-box p, .error-text{
@@ -162,7 +175,6 @@ main.login{
     box-shadow: 1px 1px 2px black;
 }
   
-  /* Show the tooltip text when you mouse over the tooltip container */
 .tooltip:hover .tooltiptext {
     visibility: visible;
 }
@@ -259,6 +271,11 @@ textarea{
 .add-comp .login-box input{
     width: auto;
     margin: 10px;
+}
+
+.add-comp .login-box input[name=title]{
+    width: 50vw;
+    min-width: 20em;
 }
 
 .add-comp .login-box input.time{

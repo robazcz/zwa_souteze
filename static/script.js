@@ -1,58 +1,32 @@
-if(window.location.pathname.includes("/login")){
-    var error_elements = {
-        login_username: "login_username_error",
-        login_password: "login_password_error"
-    }
+document.querySelector("form").addEventListener("submit", submit_form);
 
-    for(let key in error_elements){
-        document.getElementById(key).addEventListener("focusout", unfocus_input);
-    }
-
-    document.getElementById("login_form").addEventListener("submit", submit_form);
-}
-else if(window.location.pathname.includes("/register")){
-    var error_elements = {
-        register_username: "register_username_error",
-        register_password: "register_password_error",
-        register_password_2: "register_password_2_error"
-    }
-
-    for(let key in error_elements){
-        document.getElementById(key).addEventListener("focusout", unfocus_input);
-    }
-    document.getElementById("register_form").addEventListener("submit", submit_form);
-}
-else if(window.location.pathname.includes("/add_competition")){
-    var error_elements = {
-        comp_title: "comp_title_error",
-        comp_date_event: "comp_date_event_error",
-        comp_town: "comp_town_error"
-    }
-
-    for(let key in error_elements){
-        document.getElementById(key).addEventListener("focusout", unfocus_input);
-    }
-    document.getElementById("add_comp_form").addEventListener("submit", submit_form);
-}
+document.querySelectorAll("input[required]").forEach(elem => {
+    elem.addEventListener("focusout", unfocus_input);
+});
 
 function unfocus_input(){
+    let err_elem = document.getElementById(`${this.id}_error`);
+
     if(this.value == ""){
-        document.getElementById(error_elements[this.id]).innerHTML = "Pole musí být vyplněno";
+        err_elem.innerHTML = "Pole musí být vyplněno";
         this.classList.add("error");
     }
     else{
-        document.getElementById(error_elements[this.id]).innerHTML = "";
+        err_elem.innerHTML = "";
         this.classList.remove("error");
+
         if(this.id == "register_password_2"){
             if(document.getElementById("register_password").value != this.value){
-                document.getElementById("register_password_2_error").innerHTML = "Hesla se neshodují";
+                err_elem.innerHTML = "Hesla se neshodují";
                 this.classList.add("error");
             }
         }
         else if(this.id == "register_username"){
-            fetch("check", {method: "POST", headers:{"Content-Type": "application/x-www-form-urlencoded"}, body: `username=${this.value}`}).then(res => res.json()).then(data => {
+            fetch("check", {method: "POST", headers:{"Content-Type": "application/x-www-form-urlencoded"}, body: `username=${this.value}`})
+            .then(res => res.json())
+            .then(data => {
                 if(data.exist == "true"){
-                    document.getElementById(error_elements[this.id]).innerHTML = "Jméno již existuje";
+                    err_elem.innerHTML = "Jméno již existuje";
                     this.classList.add("error");
                 }
             });
@@ -61,10 +35,10 @@ function unfocus_input(){
 }
 
 function submit_form(event){
-    for(let key in error_elements){
-        document.getElementById(key).dispatchEvent(new Event("focusout"));
-        if(document.getElementById(error_elements[key]).textContent != ""){
+    document.querySelectorAll("input[required]").forEach(elem => {
+        elem.dispatchEvent(new Event("focusout"));
+        if(document.getElementById(`${elem.id}_error`).textContent != ""){ //tady to nefunguje, když je to takhle v loopu a checkuje to hodnotu, která se přidává asynchroně i když tam už dávno je
             event.preventDefault();
-            }
         }
+    });
 }

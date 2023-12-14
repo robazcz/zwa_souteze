@@ -1,10 +1,45 @@
 <?php
     session_start();
-    if(!isset($_SESSION["username"])){
-        header("Location: login?next=add_competition");
+    if(!isset($_SESSION["user"])){
+        if(isset($_GET["id"])){
+            header("Location: login?next=add_competition?id=$_GET[id]");
+        }
+        else{
+            header("Location: login?next=add_competition");
+        }
+    }
+
+    $db = new PDO("sqlite:" . __DIR__ . "/database.db");
+
+    $comp_form = [
+        "id" => "",
+        "title" => "",
+        "description" => "",
+        "proposition" => "",
+        "date_event" => "",
+        "town" => ""
+    ];
+
+    if(isset($_GET["id"])){
+        $comp = $db->prepare("SELECT * FROM competition WHERE id = ?");
+        $comp->execute([$_GET["id"]]);
+        $competition = $comp->fetch();
+
+        if($competition["id_user"] == $_SESSION["user"]["id"]){
+            $comp_form = [
+                "id" => $competition["id"],
+                "title" => $competition["title"],
+                "description" => $competition["description"],
+                "proposition" => $competition["proposition"],
+                "date_event" => $competition["date_event"],
+                "town" => $competition["town"]
+            ];
+        }
+        else{
+            header("Location: competition?id=$_GET[id]");
+        }
     }
     
-    $db = new PDO("sqlite:" . __DIR__ . "/database.db");
     $error = array();
 
     if(isset($_POST["title"], $_POST["date_event"], $_POST["town"])){
@@ -33,26 +68,57 @@
         }
 
         if(!$error){
-            $id_comp = $db->query("SELECT max(id) FROM competition");
-            $id_comp = $id_comp->fetchColumn();
-            $id_comp = $id_comp?$id_comp+1:0;
+            if($comp_form["id"] == ""){
+                $id_comp = $db->query("SELECT max(id) FROM competition");
+                $id_comp = $id_comp->fetchColumn();
+                $id_comp = $id_comp?$id_comp+1:0;
+            }
+            else{
+                $id_comp = $comp_form["id"];
+            }
+
             if(!file_exists(__DIR__."/uploads/$id_comp")){
                 mkdir(__DIR__."/uploads/$id_comp", 0777, true);
             }
+
             $prop_file = NULL;
+            if($comp_form["proposition"] != ""){
+                $prop_file = $comp_form["proposition"];
+            }
             if(isset($_FILES["proposition"]) && is_uploaded_file($_FILES["proposition"]["tmp_name"])){
                 $prop_file = basename($_FILES["proposition"]["name"]);
                 $file_target = __DIR__."/uploads/$id_comp/$prop_file";
                 if(!move_uploaded_file($_FILES["proposition"]["tmp_name"], $file_target)){
                     $error["proposition"] = "Soubor se nepodařilo uložit";
                 }
+                else{
+                    if($comp_form["proposition"] != ""){
+                        unlink(__DIR__."/uploads/$id_comp/$comp_form[proposition]");
+                    }
+                }
             }
-            if(!isset($error)){
-                $new_comp = $db->prepare("INSERT INTO competition (id_user, title, description, date_event, town, proposition) VALUES (?, ?, ?, ?, ?, ?)");
-                //echo "ukládám $_SESSION[user_id], $_POST[title], $_POST[description], $_POST[date_event], $_POST[town], $prop_file";
-                $new_comp->execute([$_SESSION["user_id"], $_POST["title"], $_POST["description"], strtotime($_POST["date_event"]), $_POST["town"], $prop_file]);
+
+            if(!$error){
+                if($comp_form["id"] != ""){
+                    $update_comp = $db->prepare("UPDATE competition SET title = ? , description = ? , date_event = ? , town = ? , proposition = ? WHERE id = $competition[id]");
+                    $update_comp->execute([$_POST["title"], $_POST["description"], $_POST["date_event"], $_POST["town"], $prop_file]);
+                }
+                else{
+                    $new_comp = $db->prepare("INSERT INTO competition (id_user, title, description, date_event, town, proposition) VALUES (?, ?, ?, ?, ?, ?)");
+                    //echo "ukládám $_SESSION[user_id], $_POST[title], $_POST[description], $_POST[date_event], $_POST[town], $prop_file";
+                    $new_comp->execute([$_SESSION["user"]["id"], $_POST["title"], $_POST["description"], $_POST["date_event"], $_POST["town"], $prop_file]);
+                }
                 Header("Location: home");
             }
+        }
+        else{
+            $comp_form = [
+                "title" => isset($_POST["title"])?$_POST["title"]:"",
+                "description" => isset($_POST["description"])?$_POST["description"]:"",
+                "proposition" => isset($_POST["proposition"])?$_POST["proposition"]:"",
+                "date_event" => isset($_POST["date_event"])?$_POST["date_event"]:"",
+                "town" => isset($_POST["town"])?$_POST["town"]:""
+            ];
         }
     }
 ?>
@@ -69,34 +135,36 @@
 <body>
 <?php include_once("header.php"); ?>
     <main class="add-comp">
-        <form action="" method="post" class="login-box" id="add_comp_form" enctype='multipart/form-data'>
+        <form action="<?php echo isset($_GET["id"])?"add_competition?id=$_GET[id]":"add_competition" ?>" method="post" class="login-box" id="add_comp_form" enctype='multipart/form-data'>
             <div>
-                <label for="comp_title">Název<div class="tooltip">*<span class="tooltiptext">Povinné pole</span></div></label>
-                <input type="text" name="title" id="comp_title" value="<?php echo isset($_POST["title"])?htmlspecialchars($_POST["title"]):""?>">
+                <label for="comp_title">Název<span class="tooltip">*<span class="tooltiptext">Povinné pole</span></span></label>
+                <input type="text" name="title" id="comp_title" required value="<?php echo htmlspecialchars($comp_form["title"])?>">
                 <p id="comp_title_error"><?php echo isset($error["title"])?$error["title"]:""?></p>
             </div>
             <div>
                 <label for="comp_description">Popis</label>
-                <textarea name="description" id="comp_description"><?php echo isset($_POST["description"])?htmlspecialchars($_POST["description"]):""?></textarea>
+                <textarea name="description" id="comp_description"><?php echo htmlspecialchars($comp_form["description"])?></textarea>
             </div>
             <div>
                 <label for="comp_proposition">Propozice</label>
                 <input type="file" name="proposition" id="comp_proposition">
+                <?php echo isset($comp_form["id"])?"<a target='_blank' href='zwa/uploads/$comp_form[id]/$comp_form[proposition]'>".htmlspecialchars($comp_form["proposition"])."</a>":""; ?>
                 <p id="comp_proposition_error"><?php echo isset($error["proposition"])?$error["proposition"]:""?></p>
             </div>
             <div>
-                <label for="comp_date_event">Datum a čas soutěže<div class="tooltip">*<span class="tooltiptext">Povinné pole</span></div></label>
-                <input type="datetime-local" name="date_event" id="comp_date_event" value="<?php echo isset($_POST["date_event"])?htmlspecialchars($_POST["date_event"]):""?>">
+                <label for="comp_date_event">Datum a čas soutěže<span class="tooltip">*<span class="tooltiptext">Povinné pole</span></span></label>
+                <input type="datetime-local" name="date_event" id="comp_date_event" required value="<?php echo htmlspecialchars($comp_form["date_event"])?>">
                 <p id="comp_date_event_error"><?php echo isset($error["date_event"])?$error["date_event"]:""?></p>
             </div>
             <div>
-                <label for="comp_town">Obec konání<div class="tooltip">*<span class="tooltiptext">Povinné pole</span></div></label>
-                <input type="text" name="town" id="comp_town" value="<?php echo isset($_POST["town"])?htmlspecialchars($_POST["town"]):""?>">
+                <label for="comp_town">Obec konání<span class="tooltip">*<span class="tooltiptext">Povinné pole</span></span></label>
+                <input type="text" name="town" id="comp_town" required value="<?php echo htmlspecialchars($comp_form["town"])?>">
                 <p id="comp_town_error"><?php echo isset($error["town"])?$error["town"]:""?></p>
             </div>
-            <input type="submit" value="Přidat">
+            <?php echo isset($_GET["id"])?"<input type='hidden' value='".htmlspecialchars($_GET["id"])."'>":"" ?>
+            <input type="submit" value="Uložit">
         </form>
     </main>
-    <script src="zwa/static/script.js" type="text/javascript"></script>
+    <script src="zwa/static/script.js"></script>
 </body>
 </html>

@@ -1,12 +1,15 @@
 <?php 
 session_start(); 
+
+if(!isset($_SESSION["user"])){
+    header("Location: login");
+}
+
 if(isset($_POST["logout"])){
-    unset($_SESSION["username"]);
+    unset($_SESSION["user"]);
     header("Location: login");
 }
-if(!isset($_SESSION["username"])){
-    header("Location: login");
-}
+
 include("functions.php");
 $db = new PDO("sqlite:" . __DIR__ . "/database.db");
 ?>
@@ -23,13 +26,13 @@ $db = new PDO("sqlite:" . __DIR__ . "/database.db");
     <?php include_once("header.php"); ?>  
     <main class="profile">
         <?php
-        if(isset($_SESSION["username"])){
-            echo "<h2>Uživatel <em>$_SESSION[username]</em></h2>";
+        if(isset($_SESSION["user"])){
+            echo "<h2>Uživatel <em>{$_SESSION['user']['username']}</em></h2>";
 
             echo "<form action='' method='post'><input type='hidden' name='logout'>";
             echo "<input type='submit' value='Odhlásit se'></form>";
         
-            $q = $db->query("SELECT * FROM competition WHERE id_user = $_SESSION[user_id] ORDER BY date_event DESC");
+            $q = $db->query("SELECT * FROM competition WHERE id_user = ".$_SESSION["user"]["id"]." ORDER BY date_event DESC");
             
             echo "<div>Mnou přidané soutěže";
             print_competitions($q->fetchAll(PDO::FETCH_ASSOC));

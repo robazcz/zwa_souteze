@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if(!isset($_SESSION["username"]) || !isset($_GET["competition"])){
+if(!isset($_SESSION["user"]) || !isset($_GET["competition"])){
     header("Location: home");
 }
 
@@ -16,7 +16,7 @@ $creator = false;
 if(!is_null($c)){ // Když už nějaký výsledky má
     // Upravování výsledků
     // $made_by = $db->query("SELECT id_user FROM results WHERE id == $c");
-    // if($_SESSION["user_id"] == $made_by->fetchColumn()){
+    // if($_SESSION["user"]["id"] == $made_by->fetchColumn()){
     //     $creator = true;
     // }
     // else{
@@ -27,7 +27,7 @@ if(!is_null($c)){ // Když už nějaký výsledky má
 
 
 if(isset($_POST["selected-categories"])){
-    $db->exec("INSERT INTO results (id_user) VALUES ($_SESSION[user_id])");
+    $db->exec("INSERT INTO results (id_user) VALUES ($_SESSION[user][id])");
     $results_id = $db->lastInsertId();
     $add_result_id = $db->prepare("UPDATE competition SET id_results = ? WHERE id = ?");
     $add_result_id->execute([$results_id, $_GET["competition"]]);
@@ -99,7 +99,7 @@ if(isset($_POST["selected-categories"])){
 <body>
 <?php include_once("header.php"); ?>
     <main class="add-comp">
-        <form action="" method="POST" class="login-box">
+        <form action="<?php echo "add_results?competition=$_GET[competition]" ?>" method="POST" class="login-box">
             <?php
             $cats = $db->query("SELECT * FROM category");
             $cats = $cats->fetchAll();
@@ -112,30 +112,36 @@ if(isset($_POST["selected-categories"])){
             echo "</div>";
 
             foreach($cats as $cat){ // Vytvoří 1 řádek inputů pro zapsání výsledku (js přidává další podle šablony níže)
-
                 echo "<div class='category-list-hid'>";
-                echo "<ol id='cat-$cat[id]'>";
                 echo "<h3>$cat[name]</h3>";
-                echo "<li id='item-$cat[id]-0'><div class='liflex'><label l-target='list-$cat[id]-0'>Tým: <input type='text' data='$cat[id]' list='list-$cat[id]-0' name='results-name-$cat[id][]' autocomplete='off'></label>";
+                echo "<ol id='cat-$cat[id]'>";
+                echo "<li id='item-$cat[id]-0'><div class='liflex'><label>Tým: <input type='text' list='list-$cat[id]-0' name='results-name-$cat[id][]' autocomplete='off'>";
+                echo "<datalist id='list-$cat[id]-0'></datalist></label>";
                 echo "<label>Čas: <input type='number' class='time' id='time-np-$cat[id]-0' name='results-time1-$cat[id][]' placeholder='sekund'></label>"; 
                 echo "<label>Čas 2: <input type='number' class='time' name='results-time2-$cat[id][]' placeholder='sekund'></label>";
-                echo "<label>NP: <input type='checkbox' data='NP-check' id='np-$cat[id]-0'></label>"; 
+                echo "<label>NP: <input type='checkbox' id='np-$cat[id]-0'></label>"; 
                 echo "<input type='hidden' name='results-np-$cat[id][]' id='helper-np-$cat[id]-0' value='false'></div></li></ol>";
-                echo "<button data='$cat[id]' data-last-id='0'>Přidat tým</button>";   
+                echo "<button id='button-$cat[id]-0'>Přidat tým</button>";   
                 echo "</div>";
             }
             ?>
 
             <input type="submit" value="Odeslat výsledky">
         </form>
+        <ol>
         <li id='item-template-id' class='disnone'><div class='liflex'>
-            <label l-target='list-template-id'>Tým: <input type='text' data='template' list='list-template-id' name='results-name-template' required autocomplete='off'></label>
+            <label>Tým: <input type='text' list='list-template-id' name='results-name-template' required autocomplete='off'>
+                <datalist id='list-template-id'></datalist>    
+            </label>
             <label>Čas: <input type='number' class='time' id='time-np-template-id' name='results-time1-template' required placeholder="sekund"></label>
             <label>Čas 2: <input type='number' class='time' name='results-time2-template' placeholder="sekund"></label>
-            <label>NP: <input type='checkbox' data='NP-check' id='np-template-id'></label> 
+            <label>NP: <input type='checkbox' id='np-template-id'></label> 
             <input type='hidden' name='results-np-template' id='helper-np-template-id' value='false'>
+            </div>
+            <!-- datalist ke každýmu list inputu -->
         </li>
+        </ol>
     </main>
-    <script src="zwa/static/add_results_script.js" type="text/javascript"></script>
+    <script src="zwa/static/add_results_script.js"></script>
 </body>
 </html>

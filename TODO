@@ -8,6 +8,7 @@ add_competition
     - zakázat přístup nepřihlášeným
     - ve scriptu udělat checking obdobně jako v registraci
     - php validate data
+    - nefunguje přidání nový soutěže a update
 
 competition
     - zobrazení obrázků

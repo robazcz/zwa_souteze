@@ -1,4 +1,6 @@
-<?php session_start();
+<?php 
+/** Hlavní stránka pro zobrazení soutěží */
+session_start();
 include("functions.php");
 ?>
 <!DOCTYPE html>
@@ -18,7 +20,7 @@ include("functions.php");
         $limit = 5;
         $site = 1;
         if(isset($_GET["limit"])){
-            if(is_numeric($_GET["limit"])){
+            if(is_numeric($_GET["limit"]) && $_GET["limit"] > 0){
                 $limit = intval($_GET["limit"]);
             }
         }

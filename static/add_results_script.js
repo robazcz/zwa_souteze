@@ -2,7 +2,7 @@ document.querySelectorAll("input[name='selected-categories[]']").forEach(elem =>
     elem.addEventListener("change", change_check);
 });
 
-document.querySelectorAll("input[data=NP-check]").forEach(elem => {
+document.querySelectorAll("ol[id^=cat] input[id^=np-]").forEach(elem => {
     elem.addEventListener("change", change_NP);
 });
 
@@ -38,7 +38,7 @@ function change_check(){
     }
 }
 
-function change_NP(){
+function change_NP(){// this = checkbox na NP
     if(this.checked){
         document.getElementById(`helper-${this.id}`).value = "true";
         document.getElementById(`time-${this.id}`).removeAttribute("required");
@@ -49,10 +49,11 @@ function change_NP(){
     }
 }
 
-function add_result_row(){
-    let data_id = parseInt(this.getAttribute("data-last-id"))+1;
-    this.setAttribute("data-last-id", data_id);
-    let cat_id = this.getAttribute("data");
+function add_result_row(){ //this = button
+    let get_ids = this.id.split("-");
+    let data_id = parseInt(get_ids[2])+1;
+    let cat_id = get_ids[1];
+    change_attribute(this, "id", cat_id, data_id)
 
     let node = document.getElementById("item-template-id").cloneNode(true);
     node.classList.remove("disnone");
@@ -66,17 +67,18 @@ function add_result_row(){
     change_attribute(node.querySelector("input[id=time-np-template-id]"), "id", cat_id, data_id);
     change_attribute(node.querySelector("input[id=np-template-id]"), "id", cat_id, data_id);
     change_attribute(node.querySelector("input[id=helper-np-template-id]"), "id", cat_id, data_id);
+    change_attribute(node.querySelector("datalist[id=list-template-id]"), "id", cat_id, data_id);
 
-    node.querySelector("input[type=text]").setAttribute("data", cat_id);
+    //node.querySelector("input[type=text]").setAttribute("data", cat_id);
 
     change_attribute(node.querySelector("input[type=text]"), "list", cat_id, data_id);
-    change_attribute(node.querySelector("input[type=text]").parentNode, "l-target", cat_id, data_id);
+    //change_attribute(node.querySelector("input[type=text]").parentNode, "l-target", cat_id, data_id);
 
     node.querySelector("input[type=text]").addEventListener("keyup", change_dataset);
 
-    node.querySelector("input[data=NP-check]").addEventListener("change", change_NP);
+    node.querySelector("input[id^=np-]").addEventListener("change", change_NP);
     
-    document.getElementById(`cat-${this.getAttribute("data")}`).appendChild(node);
+    document.getElementById(`cat-${cat_id}`).appendChild(node);
 }
 
 function change_dataset(){
@@ -86,12 +88,15 @@ function change_dataset(){
                 elem.remove();
             });
         }
-        fetch(`team_whisper?cat=${this.getAttribute("data")}&name=${this.value}`).then(r => r.text()).then(h => {
+        fetch(`team_whisper?cat=${this.getAttribute("list").split("-")[1]}&name=${this.value}`)
+        .then(r => r.text())
+        .then(h => {
             let parser = new DOMParser();
             let datalist_element = parser.parseFromString(h, "text/html").body.childNodes[0];
-            console.log(datalist_element);
+            //console.log(datalist_element);
             datalist_element.id = this.getAttribute("list");
-            document.querySelector(`label[l-target=${this.getAttribute("list")}]`).appendChild(datalist_element);
+            //document.querySelector(`label[l-target=${this.getAttribute("list")}]`).appendChild(datalist_element);
+            this.parentNode.insertBefore(datalist_element, this.nextSibling)
         });
     } 
 }

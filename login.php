@@ -1,6 +1,6 @@
 <?php 
 session_start(); 
-if(isset($_SESSION["username"])){
+if(isset($_SESSION["user"])){
     header("Location: profile");
 }
 $db = new PDO("sqlite:" . __DIR__ . "/database.db");
@@ -14,8 +14,9 @@ if(isset($_POST["username"], $_POST["password"])){
     }
     else{
         if (password_verify($_POST["password"], $user["password"])){
-            $_SESSION["username"] = $usr;
-            $_SESSION["user_id"] = $user["id"];
+            $_SESSION["user"]["username"] = $usr;
+            $_SESSION["user"]["id"] = $user["id"];
+
             if(isset($_POST["next"])){
                 header("Location: $_POST[next]");
             }
@@ -46,20 +47,19 @@ if(isset($_POST["username"], $_POST["password"])){
             <h3>Přihásit</h3>
             <?php echo isset($_GET["next"])? "<input type='hidden' name='next' value='$_GET[next]'>": "" ?>
             <div>
-                <label for="username">Uživatelské jméno<div class="tooltip">*<span class="tooltiptext">Povinné pole</span></div></label>
-                <input type="text" name="username" id="login_username" autofocus value="<?php echo isset($_POST["username"])?htmlspecialchars($_POST["username"]):"";?>">
+                <label for="login_username">Uživatelské jméno<span class="tooltip">*<span class="tooltiptext">Povinné pole</span></span></label>
+                <input type="text" name="username" id="login_username" required autofocus value="<?php echo isset($_POST["username"])?htmlspecialchars($_POST["username"]):"";?>">
                 <p id="login_username_error"></p>
             </div>
             <div>
-                <label for="password">Heslo<div class="tooltip">*<span class="tooltiptext">Povinné pole</span></div></label>
-                <input type="password" name="password" id="login_password">
+                <label for="login_password">Heslo<span class="tooltip">*<span class="tooltiptext">Povinné pole</span></span></label>
+                <input type="password" name="password" id="login_password" required>
                 <p id="login_password_error"><?php echo isset($error["login"])?$error["login"]:"";?></p>
             </div>
             <input type="submit" value="Přihlásit">
             <div><a href="register">registrace</a></div>
         </form>
-        <?php //echo "<p>".$_SESSION["username"]."</p>"; ?>
     </main>
-    <script src="zwa/static/script.js" type="text/javascript"></script>
+    <script src="zwa/static/script.js"></script>
 </body>
 </html>

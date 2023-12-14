@@ -3,8 +3,9 @@
         header("Location: home");
     }
     $db = new PDO("sqlite:" . __DIR__ . "/database.db");
-    $comp = $db->query("SELECT * FROM competition WHERE id = $_GET[id]")->fetchAll();
-    $comp = $comp[0];
+    $comp = $db->prepare("SELECT * FROM competition WHERE id = ?");
+    $comp->execute([$_GET["id"]]);
+    $comp = $comp->fetch();
 
     if(!$comp){
         header("Location: home");
@@ -36,7 +37,7 @@
                     
                     if(move_uploaded_file($value, $file_target)){
                         $add_img = $db->prepare("INSERT INTO photo (id_user, id_competition, name) VALUES (?, ?, ?)");
-                        $add_img->execute([$_SESSION["user_id"], $_POST["competition_id"], $file_name]);
+                        $add_img->execute([$_SESSION["user"]["id"], $_POST["competition_id"], $file_name]);
                         header("Location: competition?id=$_POST[competition_id]");
                     }
                 }
@@ -60,16 +61,23 @@
         <article>
             <div class="comp-name-line"><h2><?php echo htmlspecialchars($comp["title"]) ?></h2> <em><?php echo date_format(date_create($comp["date_event"]), 'j. n. Y G:i') ?></em></div>
             <hr>
+            <?php 
+            if(isset($_SESSION["user"])){
+                if($_SESSION["user"]["id"] == $comp["id_user"]){
+                    echo "<a href='add_competition?id=$comp[id]'>Upravit</a>";
+                }
+            }
+            ?>
             <p><strong>Místo konání:</strong><em class="comp-info"><?php echo htmlspecialchars($comp["town"]) ?></em></p>
-            <p><strong>Propozice:</strong><a href="<?php echo "zwa/uploads/$comp[id]/$comp[proposition]" ?>"><em class="comp-info"><?php echo $comp["proposition"] ?></em></a></p>
+            <p><strong>Propozice:</strong><a target="_blank" href="<?php echo "zwa/uploads/$comp[id]/$comp[proposition]" ?>"><em class="comp-info"><?php echo $comp["proposition"] ?></em></a></p>
             <p><?php echo htmlspecialchars($comp["description"]) ?></p>
             <p>
                 <strong>Výsledky</strong>
                 <?php
                     if(!is_null($comp["id_results"])){
                         // Upravování výsledků
-                        // if(isset($_SESSION["user_id"])){
-                        //     if($db->query("SELECT id_user FROM results WHERE id = $comp[id_results]")->fetchColumn() == $_SESSION["user_id"]){
+                        // if(isset($_SESSION["user"])){
+                        //     if($db->query("SELECT id_user FROM results WHERE id = $comp[id_results]")->fetchColumn() == $_SESSION["user"]["id"]){
                         //         echo "<a class='block' href='add_results?competition=$comp[id]'>Upravit výsledky</a>";
                         //     }
                         // }
@@ -104,7 +112,7 @@
                         echo "</div>";
                     }
                     else{
-                        if(isset($_SESSION["username"])){
+                        if(isset($_SESSION["user"])){
                             echo "<a class='block' href='add_results?competition=$comp[id]'>Přidat výsledky</a>";
                         }
                         else{
@@ -115,7 +123,7 @@
             </p>
             <p>
             <?php
-            if(isset($_SESSION["username"])){
+            if(isset($_SESSION["user"])){
                 echo "<form enctype='multipart/form-data' method='POST' action=''>";
                 echo "<label for='image_upload'>Nahrát obrázek: </label>";
                 echo "<input type='file' name='image[]' id='image_upload' multiple required>";
@@ -144,6 +152,7 @@
                 }
                 echo "</div>";
             }
+            echo "</div>";
             ?>
         </article>
     </main>
