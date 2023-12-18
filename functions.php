@@ -1,5 +1,11 @@
 <?php
-function print_competitions($competition_list){
+/**
+ * Vypíše soutěže ze seznamu soutěží z databáze
+ *
+ * @param array $competition_list Fetched seznam všech sloupečků z tabulky competition 
+ * @return void
+ */
+function print_competitions(array $competition_list){
     if(strtotime($competition_list[0]["date_event"]) > time()){
         echo "<div class='separator-div'><p class='separator-text'>Nadcházející</p>";
         echo "<hr></div>";

@@ -1,4 +1,9 @@
-<?php session_start();
+<?php 
+/** Stránka výpisu detailu soutěže
+ * - vypisuje veškeré detaily zadané při vytvoření soutěže
+ * - umožňuje zobrazení a nahrávání fotografií
+ */
+session_start();
     if(!is_numeric($_GET["id"])){
         header("Location: home");
     }
@@ -126,7 +131,7 @@
             if(isset($_SESSION["user"])){
                 echo "<form enctype='multipart/form-data' method='POST' action=''>";
                 echo "<label for='image_upload'>Nahrát obrázek: </label>";
-                echo "<input type='file' name='image[]' id='image_upload' multiple required>";
+                echo "<input type='file' name='image[]' accept='.jpg, .jpeg, .png, .gif' id='image_upload' multiple required>";
                 if(isset($error["image"])){
                     echo "<p class='error-text'>$error[image]</p>";
                 }

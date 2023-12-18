@@ -1,4 +1,7 @@
 <?php 
+/** Profil uživatele
+ * 
+ */
 session_start(); 
 
 if(!isset($_SESSION["user"])){
