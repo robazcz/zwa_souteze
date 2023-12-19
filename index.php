@@ -52,8 +52,9 @@ include("functions.php");
 
         $q = $db->query("SELECT * FROM competition ORDER BY date_event DESC LIMIT $limit OFFSET ".$limit*($site-1));
         $compets = $q->fetchAll(PDO::FETCH_ASSOC);
-        
-        print_competitions($compets);
+        if($compets){
+            print_competitions($compets);
+        }
 
     ?>
     </main>
