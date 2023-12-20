@@ -27,7 +27,7 @@ if(!is_null($c)){ // Když už nějaký výsledky má
 
 
 if(isset($_POST["selected-categories"])){
-    $db->exec("INSERT INTO results (id_user) VALUES ($_SESSION[user][id])");
+    $db->exec("INSERT INTO results (id_user) VALUES ({$_SESSION['user']['id']})");
     $results_id = $db->lastInsertId();
     $add_result_id = $db->prepare("UPDATE competition SET id_results = ? WHERE id = ?");
     $add_result_id->execute([$results_id, $_GET["competition"]]);
