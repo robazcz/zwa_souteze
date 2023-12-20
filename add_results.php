@@ -117,8 +117,8 @@ if(isset($_POST["selected-categories"])){
                 echo "<ol id='cat-$cat[id]'>";
                 echo "<li id='item-$cat[id]-0'><div class='liflex'><label>Tým: <input type='text' list='list-$cat[id]-0' name='results-name-$cat[id][]' autocomplete='off'>";
                 echo "<datalist id='list-$cat[id]-0'></datalist></label>";
-                echo "<label>Čas: <input type='number' class='time' id='time-np-$cat[id]-0' name='results-time1-$cat[id][]' placeholder='sekund'></label>"; 
-                echo "<label>Čas 2: <input type='number' class='time' name='results-time2-$cat[id][]' placeholder='sekund'></label>";
+                echo "<label>Čas: <input type='number' step='.01' class='time' id='time-np-$cat[id]-0' name='results-time1-$cat[id][]' placeholder='sekund'></label>"; 
+                echo "<label>Čas 2: <input type='number' step='.01' class='time' name='results-time2-$cat[id][]' placeholder='sekund'></label>";
                 echo "<label>NP: <input type='checkbox' id='np-$cat[id]-0'></label>"; 
                 echo "<input type='hidden' name='results-np-$cat[id][]' id='helper-np-$cat[id]-0' value='false'></div></li></ol>";
                 echo "<button id='button-$cat[id]-0'>Přidat tým</button>";   

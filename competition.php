@@ -1,22 +1,27 @@
 <?php 
 /** Stránka výpisu detailu soutěže
  * - vypisuje veškeré detaily zadané při vytvoření soutěže
+ * - umožńuje zobrazení nebo přídání výsledků
  * - umožňuje zobrazení a nahrávání fotografií
  */
 session_start();
-    if(!is_numeric($_GET["id"])){
-        header("Location: home");
-    }
-    $db = new PDO("sqlite:" . __DIR__ . "/database.db");
-    $comp = $db->prepare("SELECT * FROM competition WHERE id = ?");
-    $comp->execute([$_GET["id"]]);
-    $comp = $comp->fetch();
+if(!is_numeric($_GET["id"])){
+    header("Location: home");
+}
+$db = new PDO("sqlite:" . __DIR__ . "/database.db");
+$comp = $db->prepare("SELECT * FROM competition WHERE id = ?");
+$comp->execute([$_GET["id"]]);
+$comp = $comp->fetch();
 
-    if(!$comp){
-        header("Location: home");
+if(!$comp){
+    header("Location: home");
+}
+
+if(isset($_FILES["image"]) && !empty(isset($_FILES["image"]))){
+    if(!isset($_SESSION["user"])){
+        header("Location: competition?id=$_GET[id]");
     }
-    
-    if(isset($_FILES["image"]) && !empty(isset($_FILES["image"]))){
+    else{
         foreach($_FILES["image"]["tmp_name"] as $key=>$value){
             $file_name = basename($_FILES["image"]["name"][$key]);
             if(file_exists(__DIR__."/uploads/$comp[id]/$file_name")){
@@ -48,8 +53,9 @@ session_start();
                 }
             }
         }
-        
     }
+    
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -131,7 +137,7 @@ session_start();
             if(isset($_SESSION["user"])){
                 echo "<form enctype='multipart/form-data' method='POST' action=''>";
                 echo "<label for='image_upload'>Nahrát obrázek: </label>";
-                echo "<input type='file' name='image[]' accept='.jpg, .jpeg, .png, .gif' id='image_upload' multiple required>";
+                echo "<input type='file' name='image[]' accept='.jpg, .jpeg, .png, .gif' id='image_upload' required>";
                 if(isset($error["image"])){
                     echo "<p class='error-text'>$error[image]</p>";
                 }

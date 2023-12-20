@@ -71,7 +71,7 @@
             if($comp_form["id"] == ""){
                 $id_comp = $db->query("SELECT max(id) FROM competition");
                 $id_comp = $id_comp->fetchColumn();
-                $id_comp = $id_comp?$id_comp+1:0;
+                $id_comp = $id_comp?$id_comp+1:1;
             }
             else{
                 $id_comp = $comp_form["id"];
@@ -85,6 +85,7 @@
             if($comp_form["proposition"] != ""){
                 $prop_file = $comp_form["proposition"];
             }
+
             if(isset($_FILES["proposition"]) && is_uploaded_file($_FILES["proposition"]["tmp_name"])){
                 $prop_file = basename($_FILES["proposition"]["name"]);
                 $file_target = __DIR__."/uploads/$id_comp/$prop_file";
@@ -92,8 +93,9 @@
                     $error["proposition"] = "Soubor se nepodařilo uložit";
                 }
                 else{
-                    if($comp_form["proposition"] != ""){
-                        unlink(__DIR__."/uploads/$id_comp/$comp_form[proposition]");
+                    $existing_file = __DIR__."/uploads/$id_comp/$comp_form[proposition]";
+                    if($comp_form["proposition"] != "" && file_exists($existing_file)){
+                        unlink($existing_file);
                     }
                 }
             }
@@ -108,7 +110,7 @@
                     //echo "ukládám $_SESSION[user_id], $_POST[title], $_POST[description], $_POST[date_event], $_POST[town], $prop_file";
                     $new_comp->execute([$_SESSION["user"]["id"], $_POST["title"], $_POST["description"], $_POST["date_event"], $_POST["town"], $prop_file]);
                 }
-                Header("Location: home");
+                Header("Location: competition?id=$id_comp");
             }
         }
         else{
@@ -147,7 +149,7 @@
             </div>
             <div>
                 <label for="comp_proposition">Propozice</label>
-                <input type="file" name="proposition" id="comp_proposition">
+                <input type="file" name="proposition" accept=".doc, .docx, .php" id="comp_proposition">
                 <?php echo isset($comp_form["id"])?"<a target='_blank' href='zwa/uploads/$comp_form[id]/$comp_form[proposition]'>".htmlspecialchars($comp_form["proposition"])."</a>":""; ?>
                 <p id="comp_proposition_error"><?php echo isset($error["proposition"])?$error["proposition"]:""?></p>
             </div>

@@ -15,6 +15,9 @@ competition
 
 add_results
     - datalist při napsání něčeho do inputu udělá ajax a vypíše z databáze všechny možnosti
+    přidání kategorie
+    editace
+    
 
 - Kontrola dat na straně serveru
 - Kontrola dat na straně klienta
