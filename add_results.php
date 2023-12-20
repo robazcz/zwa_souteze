@@ -82,7 +82,7 @@ if(isset($_POST["selected-categories"])){
             $one_result->execute([$team_id, $results_id, $time1, $time2, $valid]);
         }
     }
-    //header("Location: competition?id=$_GET[competition]");
+    header("Location: competition?id=$_GET[competition]");
 }
 
 ?>
