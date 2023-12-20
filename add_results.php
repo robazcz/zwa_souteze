@@ -133,8 +133,8 @@ if(isset($_POST["selected-categories"])){
             <label>Tým: <input type='text' list='list-template-id' name='results-name-template' required autocomplete='off'>
                 <datalist id='list-template-id'></datalist>    
             </label>
-            <label>Čas: <input type='number' class='time' id='time-np-template-id' name='results-time1-template' required placeholder="sekund"></label>
-            <label>Čas 2: <input type='number' class='time' name='results-time2-template' placeholder="sekund"></label>
+            <label>Čas: <input type='number' step='.01' class='time' id='time-np-template-id' name='results-time1-template' required placeholder="sekund"></label>
+            <label>Čas 2: <input type='number' step='.01' class='time' name='results-time2-template' placeholder="sekund"></label>
             <label>NP: <input type='checkbox' id='np-template-id'></label> 
             <input type='hidden' name='results-np-template' id='helper-np-template-id' value='false'>
             </div>
