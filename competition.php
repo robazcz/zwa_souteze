@@ -82,7 +82,7 @@ if(isset($_FILES["image"]) && !empty(isset($_FILES["image"]))){
             <p><strong>Místo konání:</strong><em class="comp-info"><?php echo htmlspecialchars($comp["town"]) ?></em></p>
             <p><strong>Propozice:</strong><a target="_blank" href="<?php echo "zwa/uploads/$comp[id]/$comp[proposition]" ?>"><em class="comp-info"><?php echo $comp["proposition"] ?></em></a></p>
             <p><?php echo htmlspecialchars($comp["description"]) ?></p>
-            <p>
+            <div>
                 <strong>Výsledky</strong>
                 <?php
                     if(!is_null($comp["id_results"])){
@@ -107,7 +107,7 @@ if(isset($_FILES["image"]) && !empty(isset($_FILES["image"]))){
                                 $rowcount = 1;
                                 echo "<table class='results'>";
                                 echo "<tr><th colspan=3 class='uppercase'>".$categories[$key-1]["name"]."</th></tr>";
-                                echo "<tr><th>Pořadí</th><th>Družstvo</th><th>Čas</th>";
+                                echo "<tr><th>Pořadí</th><th>Družstvo</th><th>Čas</th></tr>";
                                 foreach( $cat_result as $result ) {
                                     if($result["valid_run"] == 1){
                                         echo "<tr><td>$rowcount</td><td>$result[name]</td><td>".number_format($result["time_run"],2,",")."</td></tr>";
@@ -131,11 +131,11 @@ if(isset($_FILES["image"]) && !empty(isset($_FILES["image"]))){
                         }
                     }
                 ?>
-            </p>
-            <p>
+            </div>
+            <div>
             <?php
             if(isset($_SESSION["user"])){
-                echo "<form enctype='multipart/form-data' method='POST' action=''>";
+                echo "<form enctype='multipart/form-data' method='POST' action='competition?id=$comp[id]'>";
                 echo "<label for='image_upload'>Nahrát obrázek: </label>";
                 echo "<input type='file' name='image[]' accept='.jpg, .jpeg, .png, .gif' id='image_upload' required>";
                 if(isset($error["image"])){
@@ -148,7 +148,7 @@ if(isset($_FILES["image"]) && !empty(isset($_FILES["image"]))){
                 echo "<em>Pro nahrávání obrázků se přihlaste</em>";
             }
             ?>
-            </p>
+            </div>
             <?php
             $pictures = $db->query("SELECT name FROM photo WHERE id_competition == $comp[id]")->fetchAll();
             //$count = count($pictures);
