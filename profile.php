@@ -1,20 +1,18 @@
 <?php 
-/** Profil uživatele
- * 
- */
-session_start(); 
+/** Profil uživatele */
 
-if(!isset($_SESSION["user"])){
-    header("Location: login");
-}
+session_start(); 
+include("functions.php");
+
+login_check("login");
 
 if(isset($_POST["logout"])){
     unset($_SESSION["user"]);
     header("Location: login");
+    exit;
 }
 
-include("functions.php");
-$db = new PDO("sqlite:" . __DIR__ . "/database.db");
+$db = db_connect();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -29,15 +27,17 @@ $db = new PDO("sqlite:" . __DIR__ . "/database.db");
     <?php include_once("header.php"); ?>  
     <main class="profile">
         <?php
+        // odhlašovací formulář
         if(isset($_SESSION["user"])){
             echo "<h2>Uživatel <em>{$_SESSION['user']['username']}</em></h2>";
 
-            echo "<form action='' method='post'><input type='hidden' name='logout'>";
+            echo "<form action='profile' method='post' class='print-hide'><input type='hidden' name='logout'>";
             echo "<input type='submit' value='Odhlásit se'></form>";
-        
+
+            // výpis přidaných soutěží
             $q = $db->query("SELECT * FROM competition WHERE id_user = ".$_SESSION["user"]["id"]." ORDER BY date_event DESC");
             
-            echo "<div>Mnou přidané soutěže";
+            echo "<div><h3>Mnou přidané soutěže</h3>";
             print_competitions($q->fetchAll(PDO::FETCH_ASSOC));
             echo "</div>";
         }

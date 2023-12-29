@@ -1,6 +1,9 @@
 <?php 
+/** Stránka registrace */
 session_start();
-$db = new PDO("sqlite:" . __DIR__ . "/database.db");
+include("functions.php");
+
+$db = db_connect();
 
 if(isset($_POST["username"], $_POST["password"], $_POST["password_2"])){
     if(empty($_POST["username"])){
@@ -28,10 +31,12 @@ if(isset($_POST["username"], $_POST["password"], $_POST["password_2"])){
     }
 
     if(!(isset($error["username"]) | isset($error["password"]) | isset($error["password_2"]))){
+        // Žádnej error
         $pswd = password_hash($_POST["password"], PASSWORD_BCRYPT);
         $usr = strtolower($_POST["username"]);
         $db->exec("INSERT INTO user (username, password) VALUES ('$usr', '$pswd')");
         header("Location: login");
+        exit;
     }    
 }
 ?>

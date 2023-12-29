@@ -4,22 +4,33 @@
  * - umožńuje zobrazení nebo přídání výsledků
  * - umožňuje zobrazení a nahrávání fotografií
  */
+
 session_start();
+include("functions.php");
+
 if(!is_numeric($_GET["id"])){
     header("Location: home");
+    exit;
 }
-$db = new PDO("sqlite:" . __DIR__ . "/database.db");
+
+$db = db_connect();
+
+// Vyhledávání soutěže v databázi
 $comp = $db->prepare("SELECT * FROM competition WHERE id = ?");
 $comp->execute([$_GET["id"]]);
 $comp = $comp->fetch();
 
+// Když v databázi neexistuje
 if(!$comp){
     header("Location: home");
+    exit;
 }
 
+// Zpracování obrázku
 if(isset($_FILES["image"]) && !empty(isset($_FILES["image"]))){
     if(!isset($_SESSION["user"])){
         header("Location: competition?id=$_GET[id]");
+        exit;
     }
     else{
         foreach($_FILES["image"]["tmp_name"] as $key=>$value){
@@ -42,6 +53,8 @@ if(isset($_FILES["image"]) && !empty(isset($_FILES["image"]))){
                         $error["image"] = "Podporované formáty jsou pouze .png, .jpg, .jpeg a .gif";
                         break;
                 }
+
+                // Když nejsou žádný errory
                 if(!isset($error)){
                     $file_target = __DIR__."/uploads/$comp[id]/$file_name";
                     
@@ -49,6 +62,7 @@ if(isset($_FILES["image"]) && !empty(isset($_FILES["image"]))){
                         $add_img = $db->prepare("INSERT INTO photo (id_user, id_competition, name) VALUES (?, ?, ?)");
                         $add_img->execute([$_SESSION["user"]["id"], $_POST["competition_id"], $file_name]);
                         header("Location: competition?id=$_POST[competition_id]");
+                        exit;
                     }
                 }
             }
@@ -80,21 +94,35 @@ if(isset($_FILES["image"]) && !empty(isset($_FILES["image"]))){
             }
             ?>
             <p><strong>Místo konání:</strong><em class="comp-info"><?php echo htmlspecialchars($comp["town"]) ?></em></p>
-            <p><strong>Propozice:</strong><a target="_blank" href="<?php echo "zwa/uploads/$comp[id]/$comp[proposition]" ?>"><em class="comp-info"><?php echo $comp["proposition"] ?></em></a></p>
+            <p>
+                <?php
+                if($comp["propoistion"]){
+                    echo "<strong>Propozice:</strong>";
+                    echo "<a target='_blank' href='zwa/uploads/$comp[id]/$comp[proposition]'>";
+                    echo "<em class='comp-info'>$comp[proposition]</em></a>";
+                }
+                ?>
+            </p>
             <p><?php echo htmlspecialchars($comp["description"]) ?></p>
             <div>
-                <strong>Výsledky</strong>
                 <?php
                     if(!is_null($comp["id_results"])){
+                        echo "<strong>Výsledky</strong>";
+
                         // Upravování výsledků
                         // if(isset($_SESSION["user"])){
                         //     if($db->query("SELECT id_user FROM results WHERE id = $comp[id_results]")->fetchColumn() == $_SESSION["user"]["id"]){
                         //         echo "<a class='block' href='add_results?competition=$comp[id]'>Upravit výsledky</a>";
                         //     }
                         // }
+
+                        // Získá všechny kategorie
                         $categories = $db->query("SELECT * FROM category")->fetchAll();
+
                         //$results = $db->query("SELECT * FROM result WHERE id_results = $comp[id_results]"); // všechny výsledky pro soutěž
+
                         $results = [];
+                        // Získej všechny výsledky podle kategorií
                         foreach ($categories as $category) {
                             $results_db = $db->query("SELECT * FROM result r, team t where r.id_team = t.id and t.id_category = $category[id] and r.id_results = $comp[id_results] ORDER BY r.valid_run DESC, r.time_run ASC");
                             $results_db = $results_db->fetchAll();
@@ -102,6 +130,7 @@ if(isset($_FILES["image"]) && !empty(isset($_FILES["image"]))){
                         }
                         echo "<div class='results'>";
                         
+                        // Vypiš všechny ty výsledky
                         foreach($results as $key => $cat_result){
                             if($cat_result){
                                 $rowcount = 1;
@@ -123,17 +152,21 @@ if(isset($_FILES["image"]) && !empty(isset($_FILES["image"]))){
                         echo "</div>";
                     }
                     else{
+                        echo "<div class='print-hide'>";
                         if(isset($_SESSION["user"])){
-                            echo "<a class='block' href='add_results?competition=$comp[id]'>Přidat výsledky</a>";
+                            echo "<a class='block' href='add_results?competition=$comp[id]'><em>Přidat výsledky</em></a>";
                         }
                         else{
                             echo "<em class='block'>Pro přidávání výsledků se přihlaste</em>";
                         }
+                        echo "</div>";
                     }
                 ?>
             </div>
             <div>
             <?php
+            // Formulář pro nahrávání obrázků
+            echo "<div class='print-hide'>";
             if(isset($_SESSION["user"])){
                 echo "<form enctype='multipart/form-data' method='POST' action='competition?id=$comp[id]'>";
                 echo "<label for='image_upload'>Nahrát obrázek: </label>";
@@ -147,9 +180,12 @@ if(isset($_FILES["image"]) && !empty(isset($_FILES["image"]))){
             else{
                 echo "<em>Pro nahrávání obrázků se přihlaste</em>";
             }
+            echo "</div>";
             ?>
             </div>
             <?php
+            
+            // Výpis obrázků
             $pictures = $db->query("SELECT name FROM photo WHERE id_competition == $comp[id]")->fetchAll();
             //$count = count($pictures);
 

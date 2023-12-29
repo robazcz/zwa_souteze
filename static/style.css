@@ -3,12 +3,6 @@
     background-color: #a6a6a6;
 }
 
-@media print{
-    .navbar{
-        display: none;
-    }
-}
-
 .navbar ul{
     list-style-type: none;
     margin: 0;
@@ -310,3 +304,8 @@ main.profile h2, main.profile input, main.profile > div{
     margin: 1rem 0 0 1rem;
 }
 
+@media print{
+    .navbar, .print-hide{
+        display: none;
+    }
+}

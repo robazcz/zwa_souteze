@@ -1,14 +1,20 @@
 <?php 
+/** Stránka pro příhlášení */
 session_start(); 
+include("functions.php");
+
 if(isset($_SESSION["user"])){
     header("Location: profile");
 }
-$db = new PDO("sqlite:" . __DIR__ . "/database.db");
+
+$db = db_connect();
+
 if(isset($_POST["username"], $_POST["password"])){
     $usr = strtolower($_POST["username"]);
     $q = $db->prepare("SELECT id, password FROM user WHERE username = ?");
     $q->execute([$usr]);
     $user = $q->fetch();
+    
     if(!$user){
         $error["login"] = "Špatné přihlašovací údaje";                
     }
@@ -19,9 +25,11 @@ if(isset($_POST["username"], $_POST["password"])){
 
             if(isset($_POST["next"])){
                 header("Location: $_POST[next]");
+                exit;
             }
             else{
-                header("Location: home"); //vyzkoušet
+                header("Location: home");
+                exit;
             }
         }
         else{

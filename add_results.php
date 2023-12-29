@@ -1,19 +1,26 @@
 <?php
+/** Stránka k přidání výsledku */
 session_start();
+include("functions.php");
 
-if(!isset($_SESSION["user"]) || !isset($_GET["competition"])){
+login_check("home");
+// Když není uvedená soutěž v uri
+if(!isset($_GET["competition"])){ 
     header("Location: home");
+    exit;
 }
 
-$db = new PDO("sqlite:" . __DIR__ . "/database.db");
+$db = db_connect();
 $competition = $db->prepare("SELECT id_results FROM competition WHERE id = ?");
 if(!$competition->execute([$_GET["competition"]])){ // Když neexistuje competition id
     header("Location: home");
+    exit;
 }
 
 $c = $competition->fetchColumn();
-$creator = false;
+//$creator = false;
 if(!is_null($c)){ // Když už nějaký výsledky má
+    
     // Upravování výsledků
     // $made_by = $db->query("SELECT id_user FROM results WHERE id == $c");
     // if($_SESSION["user"]["id"] == $made_by->fetchColumn()){
@@ -22,33 +29,40 @@ if(!is_null($c)){ // Když už nějaký výsledky má
     // else{
     //     header("Location: competition?id=$_GET[competition]");
     // }
+
     header("Location: competition?id=$_GET[competition]");
+    exit;
 }
 
 
 if(isset($_POST["selected-categories"])){
+    // Vytvoř záznam výsledků
     $db->exec("INSERT INTO results (id_user) VALUES ({$_SESSION['user']['id']})");
     $results_id = $db->lastInsertId();
+
+    // Přiřaď id novýho záznamu k soutěži
     $add_result_id = $db->prepare("UPDATE competition SET id_results = ? WHERE id = ?");
     $add_result_id->execute([$results_id, $_GET["competition"]]);
 
+    // Pro každou vybranou kategorii
     foreach($_POST["selected-categories"] as $category){
-        for($i = 0; $i < count($_POST["results-name-$category"]); $i++){
-            $one_result = $db->prepare("INSERT INTO result (id_team, id_results, time_run, time_run_2, valid_run) VALUES (?, ?, ?, ?, ?)");
-            
+        // Pro každej výsledek ve vybraný kategorii
+        for($i = 0; $i < count($_POST["results-name-$category"]); $i++){    
             $valid = 0;
-
+            
             if($_POST["results-np-$category"][$i] == "false"){
                 $valid = 1;
             }
             else{
                 $valid = 0;
             }
-
+            
+            // Vyhledej tým
             $team = $db->prepare("SELECT * FROM team WHERE id_category = ? and lower(name) = ?");
             $team->execute([$category, strtolower(trim($_POST["results-name-$category"][$i]))]);
             $s_team = $team->fetch();
-
+            
+            // Když tým neexistuje, vytvoř ho
             if(!$s_team){
                 $new_team = $db->prepare("INSERT INTO team (name, id_category) VALUES (?, ?)");
                 $new_team->execute([$_POST["results-name-$category"][$i], $category]);
@@ -57,10 +71,11 @@ if(isset($_POST["selected-categories"])){
             else{
                 $team_id = $s_team["id"];
             }
-
+            
             $time1 = NULL;
             $time2 = NULL;
-
+            
+            // Vybere pomalejší čas
             if($_POST["results-time1-$category"][$i] != ""){
                 if($_POST["results-time2-$category"][$i] != ""){
                     if($_POST["results-time1-$category"][$i] < $_POST["results-time2-$category"][$i]){
@@ -79,10 +94,14 @@ if(isset($_POST["selected-categories"])){
             else{
                 $valid = 0;
             }
+
+            // Zapiš výsledek do databáze
+            $one_result = $db->prepare("INSERT INTO result (id_team, id_results, time_run, time_run_2, valid_run) VALUES (?, ?, ?, ?, ?)");
             $one_result->execute([$team_id, $results_id, $time1, $time2, $valid]);
         }
     }
     header("Location: competition?id=$_GET[competition]");
+    exit;
 }
 
 ?>

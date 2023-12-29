@@ -1,15 +1,18 @@
 <?php
+/** Stránka pro přidání a editaci soutěže */
+
     session_start();
-    if(!isset($_SESSION["user"])){
-        if(isset($_GET["id"])){
-            header("Location: login?next=add_competition?id=$_GET[id]");
-        }
-        else{
-            header("Location: login?next=add_competition");
-        }
+    include("functions.php");
+
+    // Když v uri je uvedeno id
+    if(isset($_GET["id"])){
+        login_check("login?next=add_competition?id=$_GET[id]");
+    }
+    else{
+        login_check("login?next=add_competition");
     }
 
-    $db = new PDO("sqlite:" . __DIR__ . "/database.db");
+    $db = db_connect();
 
     $comp_form = [
         "id" => "",
@@ -21,6 +24,7 @@
     ];
 
     if(isset($_GET["id"])){
+        // Získání dat soutěže
         $comp = $db->prepare("SELECT * FROM competition WHERE id = ?");
         $comp->execute([$_GET["id"]]);
         $competition = $comp->fetch();
@@ -36,7 +40,9 @@
             ];
         }
         else{
+            // Když uživatel nevytvořil soutěž, tak nemůže editovat
             header("Location: competition?id=$_GET[id]");
+            exit;
         }
     }
     
@@ -67,16 +73,18 @@
             }
         }
 
+        // Když není žádnej error, připrav
         if(!$error){
-            if($comp_form["id"] == ""){
+            if($comp_form["id"] == ""){ // Nová soutěž
                 $id_comp = $db->query("SELECT max(id) FROM competition");
                 $id_comp = $id_comp->fetchColumn();
                 $id_comp = $id_comp?$id_comp+1:1;
             }
-            else{
+            else{ // Editovaná soutěž
                 $id_comp = $comp_form["id"];
             }
 
+            // Vytvoření složky pro soutěž - pro propozice a fotky
             if(!file_exists(__DIR__."/uploads/$id_comp")){
                 mkdir(__DIR__."/uploads/$id_comp", 0777, true);
             }
@@ -100,6 +108,7 @@
                 }
             }
 
+            // Když pořád není žádnej error, ulož
             if(!$error){
                 if($comp_form["id"] != ""){
                     $update_comp = $db->prepare("UPDATE competition SET title = ? , description = ? , date_event = ? , town = ? , proposition = ? WHERE id = $competition[id]");
@@ -111,9 +120,11 @@
                     $new_comp->execute([$_SESSION["user"]["id"], $_POST["title"], $_POST["description"], $_POST["date_event"], $_POST["town"], $prop_file]);
                 }
                 Header("Location: competition?id=$id_comp");
+                exit;
             }
         }
         else{
+            // Když je error, tak připrav hodnoty zpět k zápisu do formuláře
             $comp_form = [
                 "title" => isset($_POST["title"])?$_POST["title"]:"",
                 "description" => isset($_POST["description"])?$_POST["description"]:"",

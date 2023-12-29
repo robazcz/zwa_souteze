@@ -113,6 +113,20 @@
 </dt>
 <dd>Vypíše soutěže ze seznamu soutěží z databáze</dd>
 
+            <dt class="phpdocumentor-table-of-contents__entry -function -">
+    <a href="namespaces/default.html#function_login_check">login_check()</a>
+    <span>
+                                &nbsp;: void    </span>
+</dt>
+<dd>Funkce pro zamezení přístupu ke stránce při nepřihlášení</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -function -">
+    <a href="namespaces/default.html#function_db_connect">db_connect()</a>
+    <span>
+                                &nbsp;: <abbr title="\PDO">PDO</abbr>    </span>
+</dt>
+<dd>Funkce k připojení k databázi</dd>
+
     </dl>
 
         
@@ -159,6 +173,76 @@
     
 
     
+</article>
+                    <article class="phpdocumentor-element -function - ">
+    <h4 class="phpdocumentor-element__name" id="function_login_check">
+        login_check()
+        <a href="namespaces/default.html#function_login_check" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="zwa/functions.php"><a href="files/zwa-functions.html"><abbr title="zwa/functions.php">functions.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">41</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Funkce pro zamezení přístupu ke stránce při nepřihlášení</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility"></span>
+                    <span class="phpdocumentor-signature__name">login_check</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$redirect</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$redirect</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>Adresa pro přesměrování</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+    
+</article>
+                    <article class="phpdocumentor-element -function - ">
+    <h4 class="phpdocumentor-element__name" id="function_db_connect">
+        db_connect()
+        <a href="namespaces/default.html#function_db_connect" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="zwa/functions.php"><a href="files/zwa-functions.html"><abbr title="zwa/functions.php">functions.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">53</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Funkce k připojení k databázi</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility"></span>
+                    <span class="phpdocumentor-signature__name">db_connect</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\PDO">PDO</abbr></span></code>
+
+    
+    
+    
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type"><abbr title="\PDO">PDO</abbr></span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>proměnná k práci s databázi</p>
+</section>
+
+            </section>
+
 </article>
             </section>
 
@@ -273,6 +357,8 @@
                             <li class="phpdocumentor-on-this-page-section__title">Functions</li>
                 <li>
                     <ul class="phpdocumentor-list -clean">
+                                                    <li><a href="namespaces/default.html#function_db_connect">db_connect()</a></li>
+                                                    <li><a href="namespaces/default.html#function_login_check">login_check()</a></li>
                                                     <li><a href="namespaces/default.html#function_print_competitions">print_competitions()</a></li>
                                             </ul>
                 </li>

@@ -31,4 +31,28 @@ function print_competitions(array $competition_list){
         }
     }
 }
+
+/**
+ * Funkce pro zamezení přístupu ke stránce při nepřihlášení
+ *
+ * @param string $redirect Adresa pro přesměrování
+ * @return void
+ */
+function login_check(string $redirect){
+    if(!isset($_SESSION["user"])){
+        Header("Location: $redirect");
+        exit;
+    }
+}
+
+/**
+ * Funkce k připojení k databázi
+ *
+ * @return PDO proměnná k práci s databázi
+ */
+function db_connect(){
+    $db = new PDO("sqlite:" . __DIR__ . "/database.db");
+    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    return $db;
+}
 ?>

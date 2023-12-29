@@ -13,10 +13,12 @@ include("functions.php");
     <title>Soutěže</title>
 </head>
 <body>
-    <?php $db = new PDO("sqlite:" . __DIR__ . "/database.db"); ?>
     <?php include_once("header.php"); ?>
     <main>
     <?php
+        $db = db_connect();
+
+        // Stránkování
         $limit = 5;
         $site = 1;
         if(isset($_GET["limit"])){
@@ -50,6 +52,7 @@ include("functions.php");
         }
         echo "</div>";
 
+        // Výpis soutěží
         $q = $db->query("SELECT * FROM competition ORDER BY date_event DESC LIMIT $limit OFFSET ".$limit*($site-1));
         $compets = $q->fetchAll(PDO::FETCH_ASSOC);
         if($compets){

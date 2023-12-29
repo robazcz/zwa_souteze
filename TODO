@@ -1,3 +1,6 @@
+- udělat funkci na redirect při nepřihlášení
+- za každej redirect udělat exit;
+
 upload / competition
     - překopat to do složky id_soutěže
     - kontola přípony
