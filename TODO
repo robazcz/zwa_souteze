@@ -20,6 +20,7 @@ add_results
     - datalist při napsání něčeho do inputu udělá ajax a vypíše z databáze všechny možnosti
     přidání kategorie
     editace
+    !smazání přidané řádky
     
 
 - Kontrola dat na straně serveru
@@ -31,34 +32,34 @@ add_results
 - Ve formuláři existuje nejméně jedna závislost mezi vstupními poli. Tato závislost je kontrolována pomocí JavaScriptu.
 
 
-100% validní HTML
-Všechna formulářová pole mají spárovaný <label>
+- 100% validní HTML
+- Všechna formulářová pole mají spárovaný <label>
 - Styly jsou vyčleněny do samostatných souboru (souborů)
 - Skripty jsou vyčleněny do souboru (souborů)
-Smysluplné styly pro tisk
+- Smysluplné styly pro tisk
 - Ajax
 
 
 - Server-side stránkování
 - Existuje výpis uživatelem vložených dat
-Existuje možnost editace uživatelem vložených dat
-Data na serveru jsou do úložiště (souboru, databáze) vložena tak, jak opravdu napsal uživatel.
+- Existuje možnost editace uživatelem vložených dat
+- Data na serveru jsou do úložiště (souboru, databáze) vložena tak, jak opravdu napsal uživatel.
 
-Automaticky generovaná dokumentace
+- Automaticky generovaná dokumentace
 Zadání úlohy
 Produktová dokumentace
 Programátorská dokumentace
 
 
-Datumy jsou v lidsky čitelné podobě. 
-Obsah je rozumně seřazen. 
+- Datumy jsou v lidsky čitelné podobě. 
+- Obsah je rozumně seřazen. 
 
 Co
 - Hesla nesmí být uložena v plaintextu
-Aplikace nesmí obsahovat zranitelnosti XSS
-Při použití databáze nesmí aplikace obsahovat zranitelnosti SQL Injection
-Stránkování nesmí být realizováno jen v JavaScriptu
+- Aplikace nesmí obsahovat zranitelnosti XSS
+- Při použití databáze nesmí aplikace obsahovat zranitelnosti SQL Injection
+- Stránkování nesmí být realizováno jen v JavaScriptu
 - Kód nesmí být duplicitní
-Reloadem stránky po odeslání formuláře nesmí dojít k opakovanému vložení dat
+- Reloadem stránky po odeslání formuláře nesmí dojít k opakovanému vložení dat
 - Zákaz použití knihoven a frameworků třetích stran
 - Obrázky, stejně jako případné další velké soubory, nejsou uloženy v databázi

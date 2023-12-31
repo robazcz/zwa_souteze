@@ -160,7 +160,7 @@
             </div>
             <div>
                 <label for="comp_proposition">Propozice</label>
-                <input type="file" name="proposition" accept=".doc, .docx, .php" id="comp_proposition">
+                <input type="file" name="proposition" accept=".doc, .docx, .pdf" id="comp_proposition">
                 <?php echo isset($comp_form["id"])?"<a target='_blank' href='zwa/uploads/$comp_form[id]/$comp_form[proposition]'>".htmlspecialchars($comp_form["proposition"])."</a>":""; ?>
                 <p id="comp_proposition_error"><?php echo isset($error["proposition"])?$error["proposition"]:""?></p>
             </div>

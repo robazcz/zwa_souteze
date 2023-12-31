@@ -65,7 +65,7 @@ if(isset($_POST["username"], $_POST["password"])){
                 <p id="login_password_error"><?php echo isset($error["login"])?$error["login"]:"";?></p>
             </div>
             <input type="submit" value="Přihlásit">
-            <div><a href="register">registrace</a></div>
+            <div><a href="register">Registrace</a></div>
         </form>
     </main>
     <script src="zwa/static/script.js"></script>

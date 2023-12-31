@@ -96,7 +96,7 @@ if(isset($_FILES["image"]) && !empty(isset($_FILES["image"]))){
             <p><strong>Místo konání:</strong><em class="comp-info"><?php echo htmlspecialchars($comp["town"]) ?></em></p>
             <p>
                 <?php
-                if($comp["propoistion"]){
+                if(isset($comp["propoistion"])){
                     echo "<strong>Propozice:</strong>";
                     echo "<a target='_blank' href='zwa/uploads/$comp[id]/$comp[proposition]'>";
                     echo "<em class='comp-info'>$comp[proposition]</em></a>";
