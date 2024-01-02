@@ -134,7 +134,7 @@ if(isset($_POST["selected-categories"])){
                 echo "<div class='category-list-hid'>";
                 echo "<h3>$cat[name]</h3>";
                 echo "<ol id='cat-$cat[id]'>";
-                echo "<li id='item-$cat[id]-0'><div class='liflex'><label>Tým: <input type='text' list='list-$cat[id]-0' name='results-name-$cat[id][]' autocomplete='off'>";
+                echo "<li id='item-$cat[id]-0'><div class='liflex'><label>Tým<span class='tooltip'>*<span class='tooltiptext'>Povinné pole</span></span>: <input type='text' list='list-$cat[id]-0' name='results-name-$cat[id][]' autocomplete='off'>";
                 echo "<datalist id='list-$cat[id]-0'></datalist></label>";
                 echo "<label>Čas: <input type='number' step='.01' class='time' id='time-np-$cat[id]-0' name='results-time1-$cat[id][]' placeholder='sekund'></label>"; 
                 echo "<label>Čas 2: <input type='number' step='.01' class='time' name='results-time2-$cat[id][]' placeholder='sekund'></label>";
@@ -149,7 +149,7 @@ if(isset($_POST["selected-categories"])){
         </form>
         <ol>
         <li id='item-template-id' class='disnone'><div class='liflex'>
-            <label>Tým: <input type='text' list='list-template-id' name='results-name-template' required autocomplete='off'>
+            <label>Tým<span class="tooltip">*<span class="tooltiptext">Povinné pole</span></span>: <input type='text' list='list-template-id' name='results-name-template' required autocomplete='off'>
                 <datalist id='list-template-id'></datalist>    
             </label>
             <label>Čas: <input type='number' step='.01' class='time' id='time-np-template-id' name='results-time1-template' required placeholder="sekund"></label>

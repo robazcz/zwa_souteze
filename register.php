@@ -3,6 +3,10 @@
 session_start();
 include("functions.php");
 
+if(isset($_SESSION["user"])){
+    header("Location: profile");
+}
+
 $db = db_connect();
 
 if(isset($_POST["username"], $_POST["password"], $_POST["password_2"])){
@@ -34,7 +38,8 @@ if(isset($_POST["username"], $_POST["password"], $_POST["password_2"])){
         // Žádnej error
         $pswd = password_hash($_POST["password"], PASSWORD_BCRYPT);
         $usr = strtolower($_POST["username"]);
-        $db->exec("INSERT INTO user (username, password) VALUES ('$usr', '$pswd')");
+        $db->prepare("INSERT INTO user (username, password) VALUES (?, ?)")->execute([$usr, $pswd]);
+
         header("Location: login");
         exit;
     }    

@@ -37,7 +37,7 @@ function unfocus_input(){
 function submit_form(event){
     document.querySelectorAll("input[required]").forEach(elem => {
         elem.dispatchEvent(new Event("focusout"));
-        if(document.getElementById(`${elem.id}_error`).textContent != ""){ //tady to nefunguje, když je to takhle v loopu a checkuje to hodnotu, která se přidává asynchroně i když tam už dávno je
+        if(document.getElementById(`${elem.id}_error`).textContent != ""){
             event.preventDefault();
         }
     });

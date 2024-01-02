@@ -21,6 +21,9 @@ add_results
     přidání kategorie
     editace
     !smazání přidané řádky
+
+script.js
+    v submit_form nefunguje checkování jestli je error u registrace již existujícího jména - jelikož je to asynchroně, tak si to z nějakýho důvodu myslí, že tam není error
     
 
 - Kontrola dat na straně serveru
@@ -46,8 +49,8 @@ add_results
 - Data na serveru jsou do úložiště (souboru, databáze) vložena tak, jak opravdu napsal uživatel.
 
 - Automaticky generovaná dokumentace
-Zadání úlohy
-Produktová dokumentace
+- Zadání úlohy
+- Produktová dokumentace
 Programátorská dokumentace
 
 

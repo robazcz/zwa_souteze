@@ -28,46 +28,43 @@ if(!$comp){
 
 // Zpracování obrázku
 if(isset($_FILES["image"]) && !empty(isset($_FILES["image"]))){
-    if(!isset($_SESSION["user"])){
-        header("Location: competition?id=$_GET[id]");
-        exit;
-    }
-    else{
-        foreach($_FILES["image"]["tmp_name"] as $key=>$value){
-            $file_name = basename($_FILES["image"]["name"][$key]);
-            if(file_exists(__DIR__."/uploads/$comp[id]/$file_name")){
-                $error["image"] = "Obrázek existuje";
-            }
-        
-            if(is_uploaded_file($value)){
-                if($_FILES["image"]["size"][$key] > 8000000){ // 8MB
-                    $error["image"] = "Velikost souboru je moc velká";
-                }
-                switch(strtolower(pathinfo($_FILES["image"]["name"][$key], PATHINFO_EXTENSION))){
-                    case "png":
-                    case "jpg":
-                    case "jpeg":
-                    case "gif":
-                        break;
-                    default:
-                        $error["image"] = "Podporované formáty jsou pouze .png, .jpg, .jpeg a .gif";
-                        break;
-                }
+    login_check("competition?id=$_GET[id]");
 
-                // Když nejsou žádný errory
-                if(!isset($error)){
-                    $file_target = __DIR__."/uploads/$comp[id]/$file_name";
-                    
-                    if(move_uploaded_file($value, $file_target)){
-                        $add_img = $db->prepare("INSERT INTO photo (id_user, id_competition, name) VALUES (?, ?, ?)");
-                        $add_img->execute([$_SESSION["user"]["id"], $_POST["competition_id"], $file_name]);
-                        header("Location: competition?id=$_POST[competition_id]");
-                        exit;
-                    }
+    foreach($_FILES["image"]["tmp_name"] as $key=>$value){
+        $file_name = basename($_FILES["image"]["name"][$key]);
+        if(file_exists(__DIR__."/uploads/$comp[id]/$file_name")){
+            $error["image"] = "Obrázek existuje";
+        }
+    
+        if(is_uploaded_file($value)){
+            if($_FILES["image"]["size"][$key] > 8000000){ // 8MB
+                $error["image"] = "Velikost souboru je moc velká";
+            }
+            switch(strtolower(pathinfo($_FILES["image"]["name"][$key], PATHINFO_EXTENSION))){
+                case "png":
+                case "jpg":
+                case "jpeg":
+                case "gif":
+                    break;
+                default:
+                    $error["image"] = "Podporované formáty jsou pouze .png, .jpg, .jpeg a .gif";
+                    break;
+            }
+
+            // Když nejsou žádný errory
+            if(!isset($error)){
+                $file_target = __DIR__."/uploads/$comp[id]/$file_name";
+                
+                if(move_uploaded_file($value, $file_target)){
+                    $add_img = $db->prepare("INSERT INTO photo (id_user, id_competition, name) VALUES (?, ?, ?)");
+                    $add_img->execute([$_SESSION["user"]["id"], $_POST["competition_id"], $file_name]);
+                    header("Location: competition?id=$_POST[competition_id]");
+                    exit;
                 }
             }
         }
     }
+    
     
 }
 ?>
@@ -118,8 +115,6 @@ if(isset($_FILES["image"]) && !empty(isset($_FILES["image"]))){
 
                         // Získá všechny kategorie
                         $categories = $db->query("SELECT * FROM category")->fetchAll();
-
-                        //$results = $db->query("SELECT * FROM result WHERE id_results = $comp[id_results]"); // všechny výsledky pro soutěž
 
                         $results = [];
                         // Získej všechny výsledky podle kategorií

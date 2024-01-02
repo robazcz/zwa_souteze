@@ -36,10 +36,11 @@ $db = db_connect();
 
             // výpis přidaných soutěží
             $q = $db->query("SELECT * FROM competition WHERE id_user = ".$_SESSION["user"]["id"]." ORDER BY date_event DESC");
-            
-            if($q->fetch()){
+            $res = $q->fetchAll(PDO::FETCH_ASSOC);
+
+            if($res){
                 echo "<div><h3>Mnou přidané soutěže</h3>";
-                print_competitions($q->fetchAll(PDO::FETCH_ASSOC));
+                print_competitions($res);
                 echo "</div>";
             }
         }
