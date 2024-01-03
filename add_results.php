@@ -55,7 +55,7 @@ if(isset($_POST["selected-categories"])){
             }
 
             if(empty($_POST["results-name-$category"][$i])){
-                $error["result-name"][$category][$i] = "Jméno nesmí být prázdné";
+                $error["results-name"][$category][$i] = "Jméno nesmí být prázdné";
             }
             else{   
                 // Vyhledej tým
