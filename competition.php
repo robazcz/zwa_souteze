@@ -96,7 +96,7 @@ if(isset($_FILES["image"]) && !empty(isset($_FILES["image"]))){
                 if(isset($comp["propoistion"])){
                     echo "<strong>Propozice:</strong>";
                     echo "<a target='_blank' href='zwa/uploads/$comp[id]/$comp[proposition]'>";
-                    echo "<em class='comp-info'>$comp[proposition]</em></a>";
+                    echo "<em class='comp-info'>".htmlspecialchars($comp["proposition"])."</em></a>";
                 }
                 ?>
             </p>
@@ -134,10 +134,10 @@ if(isset($_FILES["image"]) && !empty(isset($_FILES["image"]))){
                                 echo "<tr><th>Pořadí</th><th>Družstvo</th><th>Čas</th></tr>";
                                 foreach( $cat_result as $result ) {
                                     if($result["valid_run"] == 1){
-                                        echo "<tr><td>$rowcount</td><td>$result[name]</td><td>".number_format($result["time_run"],2,",")."</td></tr>";
+                                        echo "<tr><td>$rowcount</td><td>".htmlspecialchars($result["name"])."</td><td>".number_format($result["time_run"],2,",")."</td></tr>";
                                     }
                                     else{
-                                        echo "<tr><td>$rowcount</td><td>$result[name]</td><td>NP</td></tr>";
+                                        echo "<tr><td>$rowcount</td><td>".htmlspecialchars($result["name"])."</td><td>NP</td></tr>";
                                     }
                                     $rowcount++;
                                 }

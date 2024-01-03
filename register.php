@@ -21,7 +21,7 @@ if(isset($_POST["username"], $_POST["password"], $_POST["password_2"])){
             $error["username"] = "Jméno již existuje";
         }
         if (preg_match("/^[a-zA-Z0-9-_.]+$/", $_POST["username"]) == 0){
-            $error["username"] = "Jméno obsahuje zakázané znaky";
+            $error["username"] = "Jméno obsahuje zakázané znaky (A-z-_.)";
         }
     }
 
@@ -60,7 +60,7 @@ if(isset($_POST["username"], $_POST["password"], $_POST["password_2"])){
         <form action="register" method="post" id="register_form" class="login-box">
             <h3>Registrovat</h3>
             <div>
-                <label for="register_username">Uživatelské jméno<span class="tooltip">*<span class="tooltiptext">Povinné pole</span></span></label>
+                <label for="register_username">Uživatelské jméno<span class="tooltip">*<span class="tooltiptext">Povinné pole (A-z-_.)</span></span></label>
                 <input type="text" name="username" id="register_username" required autofocus value="<?php echo isset($_POST["username"])?htmlspecialchars($_POST["username"]):"";?>">
                 <p id="register_username_error"><?php echo isset($error["username"])?$error["username"]:"";?></p>
             </div>

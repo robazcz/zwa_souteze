@@ -30,6 +30,11 @@ function unfocus_input(){
                     this.classList.add("error");
                 }
             });
+
+            if(!/^[a-zA-Z0-9-_.]+$/.test(this.value)){
+                err_elem.innerHTML = "Jméno obsahuje zakázané znaky (Povoleny A-z, -, _, .)";
+                this.classList.add("error");
+            }
         }
     }
 }

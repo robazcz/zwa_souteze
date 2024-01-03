@@ -59,6 +59,9 @@ function add_result_row(){ //this = button
     node.classList.remove("disnone");
     change_attribute(node, "id", cat_id, data_id);
 
+    node.querySelector("input[name=results-name-template]").setAttribute("required", "");
+    node.querySelector("input[name=results-time1-template]").setAttribute("required", "");
+
     change_attribute(node.querySelector("input[name=results-name-template]"), "name", cat_id);
     change_attribute(node.querySelector("input[name=results-time1-template]"), "name", cat_id);
     change_attribute(node.querySelector("input[name=results-time2-template]"), "name", cat_id);
